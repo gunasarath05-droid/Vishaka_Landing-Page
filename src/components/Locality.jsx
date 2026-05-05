@@ -129,13 +129,24 @@ export default function Locality() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
-                  initial={{ rotateY: -20, opacity: 0, x: 50 }}
-                  animate={{ rotateY: 0, opacity: 1, x: 0 }}
-                  exit={{ rotateY: 20, opacity: 0, x: -50 }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  initial={{ rotateY: 45, x: 30, opacity: 0 }}
+                  animate={{ rotateY: 0, x: 0, opacity: 1 }}
+                  exit={{ rotateY: -110, x: -60, opacity: 0 }}
+                  transition={{ 
+                    duration: 0.8, 
+                    ease: [0.645, 0.045, 0.355, 1], // Cubic-bezier for paper-like movement
+                  }}
                   className="bg-white shadow-2xl rounded-r-2xl overflow-hidden border border-gold/10 relative"
-                  style={{ transformOrigin: "left center" }}
+                  style={{ transformOrigin: "left center", backfaceVisibility: "hidden" }}
                 >
+                  {/* Page Highlight/Shadow effect during turn */}
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0 }}
+                    exit={{ opacity: 0.4 }}
+                    className="absolute inset-0 bg-black z-30 pointer-events-none transition-opacity duration-300"
+                  />
+
                   {/* Notebook Paper Texture Overlay */}
                   <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 23px, #000 24px)' }} />
 
