@@ -129,12 +129,12 @@ export default function Locality() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
-                  initial={{ rotateY: 90, skewY: 10, x: 60, opacity: 0 }}
-                  animate={{ rotateY: 0, skewY: 0, x: 0, opacity: 1 }}
-                  exit={{ rotateY: -110, skewY: -15, x: -80, opacity: 0 }}
+                  initial={{ rotateY: 90, skewY: 10, x: 60, opacity: 0, filter: "blur(10px)" }}
+                  animate={{ rotateY: 0, skewY: 0, x: 0, opacity: 1, filter: "blur(0px)" }}
+                  exit={{ rotateY: -110, skewY: -15, x: -80, opacity: 0, filter: "blur(10px)" }}
                   transition={{
                     duration: 0.9,
-                    ease: [0.645, 0.045, 0.355, 1], // Cubic-bezier for realistic paper movement
+                    ease: [0.645, 0.045, 0.355, 1], // Custom cubic-bezier for realistic paper movement
                   }}
                   className="bg-white shadow-2xl rounded-r-2xl overflow-hidden border border-gold/10 relative"
                   style={{ transformOrigin: "left center", backfaceVisibility: "hidden" }}
