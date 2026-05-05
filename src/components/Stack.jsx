@@ -103,14 +103,18 @@ export default function Stack({
       const index = newStack.findIndex(card => card.id === id);
       const [card] = newStack.splice(index, 1);
       newStack.unshift(card);
-      
-      // The new top card is now at index length - 1
-      const topCard = newStack[newStack.length - 1];
-      onCardChange(topCard.id);
-      
       return newStack;
     });
   };
+
+  // Notify parent when top card changes, safely outside the render cycle
+  useEffect(() => {
+    if (stack.length) {
+      const topCard = stack[stack.length - 1];
+      onCardChange(topCard.id);
+    }
+  }, [stack, onCardChange]);
+
 
   useEffect(() => {
     if (autoplay && stack.length > 1 && !isPaused) {
