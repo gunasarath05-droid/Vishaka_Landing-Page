@@ -11,7 +11,7 @@ export default function Hero() {
   // Auto-popup every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsOpen(true);
+      setIsOpen(false);
     }, 10000);
     return () => clearInterval(interval);
   }, []);
