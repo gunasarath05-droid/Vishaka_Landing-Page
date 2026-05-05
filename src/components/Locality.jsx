@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import * as Images from "@/data/images";
 import Image from "next/image";
-import { ChevronRight } from "lucide-react";
 
 const locations = [
   { name: "Tidel Park", img: Images.TidelPark, cat: "Work", dist: "~8 km", time: "~15 min", angle: -90, r: 210, tag: "IT Hub" },
@@ -23,8 +22,7 @@ export default function Locality() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const filteredLocations = locations.filter(l => l.cat === activeCategory);
-
+  // Auto-cycle highlight flow
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
@@ -32,6 +30,8 @@ export default function Locality() {
     }, 4000);
     return () => clearInterval(timer);
   }, [isPaused]);
+
+  const activeLoc = locations[activeIndex];
 
   const cx = 250;
   const cy = 250;
@@ -45,26 +45,24 @@ export default function Locality() {
   };
 
   return (
-    <section id="locality" className="bg-cream py-20 lg:py-32 px-6 relative overflow-hidden">
+    <section id="locality" className="bg-cream py-20 lg:py-32 px-6 relative overflow-hidden font-sans">
       <div className="absolute inset-0 pointer-events-none opacity-20" 
            style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-16">
-          <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} className="text-gold text-[10px] tracking-[6px] font-semibold uppercase block mb-4">Strategic Location</motion.span>
-          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-4xl lg:text-6xl text-royal-dark font-serif mb-6">Connected to <em className="text-gold not-italic">Everything</em></motion.h2>
+          <motion.span className="text-gold text-[10px] tracking-[6px] font-semibold uppercase block mb-4">Strategic Location</motion.span>
+          <motion.h2 className="text-4xl lg:text-6xl text-royal-dark font-serif mb-6">Connected to <em className="text-gold not-italic">Everything</em></motion.h2>
           <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-          {/* LEFT: Radial Layout matching the sketch */}
+          {/* LEFT: Radial Layout */}
           <div className="lg:col-span-7 relative aspect-square max-w-[550px] mx-auto w-full">
             <svg viewBox="0 0 500 500" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
-              {/* Radial Circles from sketch */}
               <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(184,150,87,0.1)" strokeWidth="1" />
               <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(184,150,87,0.2)" strokeWidth="1.5" strokeDasharray="8 6" />
               
-              {/* Lines from center image to nodes */}
               {locations.map((loc, i) => {
                 const pos = getPosition(loc.angle, loc.r);
                 return (
@@ -74,7 +72,6 @@ export default function Locality() {
                     stroke={activeIndex === i ? "#B89657" : "rgba(184,150,87,0.3)"}
                     strokeWidth={activeIndex === i ? "2" : "1.5"}
                     strokeDasharray={activeIndex === i ? "10 5" : "5 8"}
-                    initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   />
@@ -82,13 +79,9 @@ export default function Locality() {
               })}
             </svg>
 
-            {/* Central Hub: Square Image as shown in the sketch */}
+            {/* Central Hub */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
-              <motion.div 
-                initial={{ scale: 0.8, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                className="relative w-40 h-32 md:w-48 md:h-36 p-1 bg-white border border-gold/30 shadow-2xl"
-              >
+              <motion.div className="relative w-40 h-32 md:w-48 md:h-36 p-1 bg-white border border-gold/30 shadow-2xl">
                 <div className="relative w-full h-full overflow-hidden">
                   <Image src={Images.Locality} alt="Sai Ram Flats" fill className="object-cover" sizes="200px" />
                 </div>
@@ -98,21 +91,18 @@ export default function Locality() {
               </motion.div>
             </div>
 
-            {/* Orbit Nodes: Positioned 45 degrees apart as per sketch placement */}
+            {/* Orbit Nodes */}
             {locations.map((loc, i) => {
               const pos = getPosition(loc.angle, loc.r);
               return (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
                   style={{ left: `${(pos.x / 500) * 100}%`, top: `${(pos.y / 500) * 100}%` }}
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer group"
                   onClick={() => { setActiveIndex(i); setIsPaused(true); }}
                   onMouseEnter={() => { setActiveIndex(i); setIsPaused(true); }}
                   onMouseLeave={() => setIsPaused(false)}
                 >
-
                   <div className={`w-16 h-16 rounded-full p-1 bg-white border border-gold/20 shadow-xl transition-all duration-500 overflow-hidden relative
                                  ${activeIndex === i ? "scale-125 border-gold shadow-gold/20" : "group-hover:scale-110 group-hover:border-gold/50"}`}>
                     <Image src={loc.img} alt={loc.name} fill className="object-cover" sizes="64px" />
@@ -125,89 +115,89 @@ export default function Locality() {
                 </motion.div>
               );
             })}
-
           </div>
 
-          {/* RIGHT Panel: Filtered Cards */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            <div className="flex flex-wrap gap-2 mb-2">
+          {/* RIGHT: Notebook Style Card */}
+          <div className="lg:col-span-5 flex flex-col items-center">
+            {/* Filters */}
+            <div className="flex flex-wrap gap-2 mb-8 justify-center">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => { setActiveCategory(cat); setActiveIndex(locations.findIndex(l => l.cat === cat)); }}
-                  className={`text-[9px] font-bold tracking-[2px] uppercase px-5 py-2.5 border transition-all duration-300
-                             ${activeCategory === cat ? "bg-gold text-white border-gold shadow-lg shadow-gold/20" : "bg-white border-gold/20 text-royal-dark/40 hover:border-gold/50 hover:text-royal-dark"}`}
+                  className={`text-[9px] font-bold tracking-[2px] uppercase px-4 py-2 border transition-all duration-300
+                             ${activeCategory === cat ? "bg-gold text-white border-gold" : "bg-white border-gold/20 text-royal-dark/40"}`}
                 >
                   {cat}
                 </button>
               ))}
             </div>
 
-            <div className="flex flex-col gap-4 overflow-y-auto max-h-[550px] pr-2 custom-scrollbar">
-              <AnimatePresence mode="popLayout">
-                {locations.filter(l => l.cat === activeCategory).map((loc) => {
-                  const idx = locations.indexOf(loc);
-                  const isActive = activeIndex === idx;
-                  return (
-                    <motion.div
-                      key={loc.name}
-                      layout
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      onMouseEnter={() => { setActiveIndex(idx); setIsPaused(true); }}
-                      onMouseLeave={() => setIsPaused(false)}
-                      className={`bg-white border p-5 cursor-pointer transition-all duration-500 relative overflow-hidden group shadow-sm
-                                 ${isActive ? "border-gold/40 shadow-xl shadow-gold/5" : "border-gold/10 hover:border-gold/30 hover:shadow-md"}`}
-                    >
-                      <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gold transition-transform duration-500 origin-top
-                                     ${isActive ? "scale-y-100" : "scale-y-0"}`} />
+            {/* Notebook Page Container */}
+            <div className="relative w-full max-w-[400px] perspective-1000">
+              {/* Spiral/Rings on the left */}
+              <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="w-8 h-2 bg-gradient-to-r from-gray-400 to-gray-200 rounded-full shadow-md border border-gray-300" />
+                ))}
+              </div>
 
-                      <div className="flex items-center gap-4">
-                        <div className="relative w-12 h-12 rounded-full border border-gold/10 overflow-hidden flex-shrink-0">
-                          <Image src={loc.img} alt={loc.name} fill className="object-cover" sizes="48px" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className={`font-serif text-lg transition-colors duration-300 ${isActive ? "text-gold" : "text-royal-dark"}`}>
-                            {loc.name}
-                          </h4>
-                          <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] font-bold text-gold">{loc.dist}</span>
-                            <div className="w-px h-2.5 bg-gold/20" />
-                            <span className="text-[10px] text-royal-dark/30 uppercase tracking-tight">{loc.time}</span>
-                          </div>
-                        </div>
-                        <ChevronRight size={16} className={`transition-all duration-500 ${isActive ? "text-gold translate-x-1" : "text-gold/20"}`} />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ rotateY: -20, opacity: 0, x: 50 }}
+                  animate={{ rotateY: 0, opacity: 1, x: 0 }}
+                  exit={{ rotateY: 20, opacity: 0, x: -50 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  className="bg-white shadow-2xl rounded-r-2xl overflow-hidden border border-gold/10 relative"
+                  style={{ transformOrigin: "left center" }}
+                >
+                  {/* Notebook Paper Texture Overlay */}
+                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 23px, #000 24px)' }} />
+
+                  {/* Top: Image Section */}
+                  <div className="relative w-full h-56 md:h-64 overflow-hidden border-b border-gold/10">
+                    <Image src={activeLoc.img} alt={activeLoc.name} fill className="object-cover" sizes="400px" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    <div className="absolute top-4 right-4 bg-gold/90 backdrop-blur-sm text-white px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
+                      {activeLoc.tag}
+                    </div>
+                  </div>
+
+                  {/* Bottom: Details Section */}
+                  <div className="p-8 space-y-8 bg-white/80 backdrop-blur-sm relative">
+                    <div className="border-b border-gold/10 pb-4">
+                      <h3 className="font-serif text-3xl text-royal-dark mb-1">{activeLoc.name}</h3>
+                      <p className="text-gold text-xs font-medium tracking-[3px] uppercase">Landmark Details</p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-y-8 gap-x-12">
+                      <div className="space-y-1">
+                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Category</p>
+                        <p className="text-sm font-medium text-royal-dark/70">{activeLoc.cat}</p>
                       </div>
+                      <div className="space-y-1">
+                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Status</p>
+                        <p className="text-sm font-bold text-gold italic">{activeLoc.tag}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Reach</p>
+                        <p className="text-sm font-serif text-royal-dark font-semibold italic text-xl">{activeLoc.dist}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Travel Time</p>
+                        <p className="text-sm font-medium text-royal-dark/60">{activeLoc.time}</p>
+                      </div>
+                    </div>
 
-                      <AnimatePresence>
-                        {isActive && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="pt-5 mt-5 border-t border-gold/10 grid grid-cols-3 gap-4">
-                              <div className="space-y-1">
-                                <p className="text-[7px] tracking-[2px] uppercase text-royal-dark/30">Category</p>
-                                <p className="text-[10px] text-royal-dark/60">{loc.cat}</p>
-                              </div>
-                              <div className="space-y-1">
-                                <p className="text-[7px] tracking-[2px] uppercase text-royal-dark/30">Status</p>
-                                <p className="text-[10px] text-gold font-bold">{loc.tag}</p>
-                              </div>
-                              <div className="space-y-1">
-                                <p className="text-[7px] tracking-[2px] uppercase text-royal-dark/30">Reach</p>
-                                <p className="text-[10px] text-royal-dark/80">{loc.dist}</p>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  );
-                })}
+                    {/* Signature/Stamp look */}
+                    <div className="flex justify-end pt-4">
+                      <div className="w-16 h-16 border-2 border-gold/20 rounded-full flex items-center justify-center -rotate-12">
+                        <span className="text-gold/40 text-[8px] font-bold tracking-widest uppercase text-center leading-none">Verified<br/>Site</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
               </AnimatePresence>
             </div>
           </div>
@@ -215,10 +205,7 @@ export default function Locality() {
       </div>
 
       <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(184,150,87,0.05); }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(184,150,87,0.2); border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(184,150,87,0.4); }
+        .perspective-1000 { perspective: 1000px; }
       `}</style>
     </section>
   );
