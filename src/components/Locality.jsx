@@ -23,11 +23,12 @@ export default function Locality() {
     if (isPaused) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % locations.length);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [isPaused]);
 
   const activeLoc = locations[activeIndex];
+  const nextLoc = locations[(activeIndex + 1) % locations.length];
 
   const cx = 250;
   const cy = 250;
@@ -46,15 +47,15 @@ export default function Locality() {
            style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-12">
+        <div className="text-center mb-16">
           <span className="text-gold text-[10px] tracking-[5px] font-semibold uppercase block mb-4">Strategic Location</span>
-          <h2 className="section-title text-4xl md:text-5xl text-deep font-serif">Connected to Everything</h2>
+          <h2 className="text-4xl md:text-5xl text-royal-dark font-serif">Connected to Everything</h2>
           <div className="w-16 h-0.5 bg-gradient-to-r from-gold to-transparent mx-auto mt-6" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
           {/* LEFT: Radial Layout */}
-          <div className="lg:col-span-7 relative aspect-square max-w-[550px] mx-auto w-full">
+          <div className="lg:col-span-6 relative aspect-square max-w-[500px] mx-auto w-full">
             <svg viewBox="0 0 500 500" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
               <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(184,150,87,0.1)" strokeWidth="1" />
               <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(184,150,87,0.2)" strokeWidth="1.5" strokeDasharray="8 6" />
@@ -77,11 +78,11 @@ export default function Locality() {
 
             {/* Central Hub */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
-              <motion.div className="relative w-40 h-32 md:w-48 md:h-36 p-1 bg-white border border-gold/30 shadow-2xl">
+              <motion.div className="relative w-32 h-24 md:w-40 md:h-28 p-1 bg-white border border-gold/30 shadow-2xl">
                 <div className="relative w-full h-full overflow-hidden">
                   <Image src={Images.Locality} alt="Sai Ram Flats" fill className="object-cover" sizes="200px" />
                 </div>
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-gold text-white px-5 py-1.5 whitespace-nowrap text-[8px] font-bold tracking-[3px] uppercase shadow-xl">
+                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-gold text-white px-4 py-1 whitespace-nowrap text-[7px] font-bold tracking-[2px] uppercase shadow-xl">
                   Sai Ram Flats
                 </div>
               </motion.div>
@@ -96,108 +97,195 @@ export default function Locality() {
                   style={{ left: `${(pos.x / 500) * 100}%`, top: `${(pos.y / 500) * 100}%` }}
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer group"
                   onClick={() => { setActiveIndex(i); setIsPaused(true); }}
-                  onMouseEnter={() => { setActiveIndex(i); setIsPaused(true); }}
-                  onMouseLeave={() => setIsPaused(false)}
                 >
-                  <div className={`w-16 h-16 rounded-full p-1 bg-white border border-gold/20 shadow-xl transition-all duration-500 overflow-hidden relative
-                                 ${activeIndex === i ? "scale-125 border-gold shadow-gold/20" : "group-hover:scale-110 group-hover:border-gold/50"}`}>
-                    <Image src={loc.img} alt={loc.name} fill className="object-cover" sizes="64px" />
-                    <div className={`absolute inset-0 bg-gold/5 transition-opacity duration-500 ${activeIndex === i ? "opacity-0" : "opacity-20 group-hover:opacity-0"}`} />
+                  <div className={`w-12 h-12 rounded-full p-0.5 bg-white border border-gold/20 shadow-lg transition-all duration-500 overflow-hidden relative
+                                 ${activeIndex === i ? "scale-125 border-gold shadow-gold/20" : "group-hover:scale-110"}`}>
+                    <Image src={loc.img} alt={loc.name} fill className="object-cover" sizes="48px" />
                   </div>
-                  <span className={`absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-bold tracking-wider transition-colors duration-300
-                                 ${activeIndex === i ? "text-gold" : "text-royal-dark/70"}`}>
-                    {loc.name.split(" ")[0]}
-                  </span>
                 </motion.div>
               );
             })}
           </div>
 
-          {/* RIGHT: Realistic 3D Flipping Notebook */}
-          <div className="lg:col-span-5 flex flex-col items-center">
-            <div className="relative w-full max-w-[400px] perspective-630 mt-12 lg:mt-0">
-              
-              {/* Spine/Binding rings */}
-              <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-50">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="w-8 h-2 bg-gradient-to-r from-gray-400 to-gray-200 rounded-full shadow-md border border-gray-300" />
-                ))}
+          {/* RIGHT: Realistic Segmented Book Flip */}
+          <div className="lg:col-span-6 flex flex-col items-center">
+            <div className="book-container">
+              <div className="book-body">
+                {/* Static Left Page (Current Info) */}
+                <div className="book-page left-page">
+                   <div className="page-content">
+                      <div className="relative w-full h-40 mb-4 overflow-hidden rounded-lg">
+                        <Image src={activeLoc.img} alt={activeLoc.name} fill className="object-cover" />
+                      </div>
+                      <h3 className="font-serif text-2xl text-royal-dark mb-2">{activeLoc.name}</h3>
+                      <div className="space-y-2 text-[10px] tracking-wider uppercase text-royal-dark/60 font-bold">
+                        <p className="flex justify-between"><span>Category:</span> <span className="text-gold">{activeLoc.cat}</span></p>
+                        <p className="flex justify-between"><span>Distance:</span> <span className="text-gold">{activeLoc.dist}</span></p>
+                        <p className="flex justify-between"><span>Travel:</span> <span className="text-gold">{activeLoc.time}</span></p>
+                      </div>
+                   </div>
+                </div>
+
+                {/* Static Right Page (Next Info - visible during flip) */}
+                <div className="book-page right-page">
+                   <div className="page-content">
+                      <div className="relative w-full h-40 mb-4 overflow-hidden rounded-lg">
+                        <Image src={nextLoc.img} alt={nextLoc.name} fill className="object-cover" />
+                      </div>
+                      <h3 className="font-serif text-2xl text-royal-dark mb-2">{nextLoc.name}</h3>
+                      <div className="space-y-2 text-[10px] tracking-wider uppercase text-royal-dark/60 font-bold">
+                        <p className="flex justify-between"><span>Category:</span> <span className="text-gold">{nextLoc.cat}</span></p>
+                        <p className="flex justify-between"><span>Distance:</span> <span className="text-gold">{nextLoc.dist}</span></p>
+                        <p className="flex justify-between"><span>Travel:</span> <span className="text-gold">{nextLoc.time}</span></p>
+                      </div>
+                   </div>
+                </div>
+
+                {/* The Flipping Page Segments */}
+                <div className="flipping-page-container">
+                  <AnimatePresence mode="wait">
+                    <motion.div 
+                      key={activeIndex}
+                      className="flipping-segment-root"
+                      initial={{ rotateY: 0 }}
+                      animate={{ rotateY: -180 }}
+                      transition={{ duration: 1.5, ease: "easeInOut" }}
+                    >
+                      {/* Segment 1 */}
+                      <div className="segment s1">
+                        <div className="segment s2">
+                          <div className="segment s3">
+                            <div className="segment s4">
+                               <div className="segment-content">
+                                  {/* Back of the page (shows next content) */}
+                                  <div className="back-side">
+                                    <Image src={nextLoc.img} alt="" fill className="object-cover" />
+                                  </div>
+                                  {/* Front of the page (shows current content) */}
+                                  <div className="front-side">
+                                    <Image src={activeLoc.img} alt="" fill className="object-cover" />
+                                  </div>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                <div className="spine"></div>
               </div>
-
-              {/* Background 'Stacked' Pages for 3D depth */}
-              <div className="absolute inset-0 bg-white/80 shadow-md rounded-r-2xl border border-gold/5 transform translate-x-1 translate-y-1 -z-10" />
-              <div className="absolute inset-0 bg-white/60 shadow-md rounded-r-2xl border border-gold/5 transform translate-x-2 translate-y-2 -z-20 blur-[1px]" />
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={{ rotateY: 170, opacity: 0.5, x: -20, filter: "blur(4px)" }}
-                  animate={{ rotateY: 0, opacity: 1, x: 0, filter: "blur(0px)" }}
-                  exit={{ rotateY: -170, opacity: 0.5, x: -20, filter: "blur(4px)" }}
-                  transition={{ 
-                    duration: 1.2, 
-                    ease: [0.645, 0.045, 0.355, 1], // Physical page flip ease
-                  }}
-                  className="bg-white shadow-[0_10px_25px_rgba(0,0,0,0.15)] rounded-r-2xl overflow-hidden border border-gold/10 relative min-h-[580px] origin-left preserve-3d"
-                  style={{ transformStyle: "preserve-3d" }}
-                >
-                  {/* Page Highlight/Shadow sweeping across */}
-                  <motion.div
-                    initial={{ opacity: 0, x: "100%" }}
-                    animate={{ opacity: 0, x: "100%" }}
-                    exit={{ opacity: 0.3, x: "-100%" }}
-                    transition={{ duration: 1.2 }}
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-transparent z-40 pointer-events-none"
-                  />
-
-                  {/* Notebook Paper Texture */}
-                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 23px, #000 24px)' }} />
-
-                  {/* Top: Image Section */}
-                  <div className="relative w-full h-56 md:h-64 overflow-hidden border-b border-gold/10">
-                    <Image src={activeLoc.img} alt={activeLoc.name} fill className="object-cover" sizes="400px" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    <div className="absolute top-4 right-4 bg-gold/90 backdrop-blur-sm text-white px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
-                      {activeLoc.tag}
-                    </div>
-                  </div>
-
-                  {/* Bottom: Details Section */}
-                  <div className="p-8 space-y-8 bg-white/80 backdrop-blur-sm relative">
-                    <div className="border-b border-gold/10 pb-4">
-                      <h3 className="font-serif text-3xl text-royal-dark mb-1">{activeLoc.name}</h3>
-                      <p className="text-gold text-xs font-medium tracking-[3px] uppercase">Landmark Details</p>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-y-8 gap-x-12">
-                      <div className="space-y-1">
-                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Category</p>
-                        <p className="text-sm font-medium text-royal-dark/70">{activeLoc.cat}</p>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Status</p>
-                        <p className="text-sm font-bold text-gold italic">{activeLoc.tag}</p>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Reach</p>
-                        <p className="text-sm font-serif text-royal-dark font-semibold italic text-xl">{activeLoc.dist}</p>
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Travel Time</p>
-                        <p className="text-sm font-medium text-royal-dark/60">{activeLoc.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
             </div>
           </div>
         </div>
       </div>
 
-      <style jsx global>{`
-        .perspective-630 { perspective: 630px; }
-        .preserve-3d { transform-style: preserve-3d; }
+      <style jsx>{`
+        .book-container {
+          perspective: 1200px;
+          width: 100%;
+          max-width: 500px;
+          height: 400px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transform: rotateX(25deg);
+        }
+        .book-body {
+          position: relative;
+          width: 480px;
+          height: 320px;
+          background: #e5e5e5;
+          transform-style: preserve-3d;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+          border-radius: 4px;
+        }
+        .book-page {
+          position: absolute;
+          width: 240px;
+          height: 320px;
+          background: white;
+          padding: 30px;
+          box-sizing: border-box;
+          border: 1px solid #ddd;
+        }
+        .left-page {
+          left: 0;
+          transform-origin: right;
+          border-radius: 4px 0 0 4px;
+        }
+        .right-page {
+          right: 0;
+          transform-origin: left;
+          border-radius: 0 4px 4px 0;
+        }
+        .page-content {
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+        }
+        .spine {
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 2px;
+          height: 100%;
+          background: rgba(0,0,0,0.1);
+          z-index: 100;
+        }
+        
+        .flipping-page-container {
+          position: absolute;
+          right: 0;
+          width: 240px;
+          height: 320px;
+          transform-style: preserve-3d;
+          z-index: 50;
+          pointer-events: none;
+        }
+
+        .flipping-segment-root {
+          width: 100%;
+          height: 100%;
+          transform-style: preserve-3d;
+          transform-origin: left center;
+        }
+
+        .segment {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 25%;
+          height: 100%;
+          background: white;
+          transform-style: preserve-3d;
+          transform-origin: right center;
+        }
+
+        .s1 { width: 100%; left: 0; transform-origin: left center; }
+        .s2, .s3, .s4 { width: 100%; left: 0; }
+
+        .segment-content {
+          position: absolute;
+          inset: 0;
+          transform-style: preserve-3d;
+        }
+
+        .front-side, .back-side {
+          position: absolute;
+          inset: 0;
+          backface-visibility: hidden;
+          background: white;
+          border: 1px solid #eee;
+        }
+
+        .back-side {
+          transform: rotateY(180deg);
+        }
+
+        /* Simulating the bend by adding rotation to each nested segment */
+        /* This is a simplified version of the segmented flip */
       `}</style>
     </section>
   );
