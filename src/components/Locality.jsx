@@ -3,20 +3,19 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import * as Images from "@/data/images";
 import Image from "next/image";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const locations = [
-  { name: "Tidel Park", img: Images.TidelPark, cat: "Work", dist: "~8 km", time: "~15 min", angle: -120, r: 150, tag: "IT Hub" },
-  { name: "Chennai Airport", img: Images.ChennaiAirport, cat: "Transport", dist: "~4 km", time: "~10 min", angle: -60, r: 150, tag: "International" },
-  { name: "Velachery Station", img: Images.VelacherryRailwayStation, cat: "Transport", dist: "~1.5 km", time: "~5 min", angle: 0, r: 150, tag: "MRTS" },
-  { name: "Madipakkam Metro", img: Images.MetroStation, cat: "Transport", dist: "~5 km", time: "~12 min", angle: 60, r: 150, tag: "Metro" },
-  { name: "Iswarya Hospital", img: Images.IshwaryaHospital, cat: "Health", dist: "~1 km", time: "~3 min", angle: 120, r: 150, tag: "Multi-specialty" },
-  { name: "Guindy Park", img: Images.GuindyNationalPark, cat: "Leisure", dist: "3 km", time: "7 min", angle: 180, r: 150, tag: "National Park" },
-  { name: "IIT Madras", img: Images.IITMadras, cat: "Education", dist: "6 km", time: "12 min", angle: -180, r: 220, tag: "Premier Institute" },
-  { name: "Phoenix Mall", img: Images.PhoenixMarketcity, cat: "Leisure", dist: "5 km", time: "10 min", angle: -90, r: 220, tag: "Premium Retail" },
+  { name: "Tidel Park", img: Images.TidelPark, cat: "Work", dist: "~8 km", time: "~15 min", angle: -90, r: 210, tag: "IT Hub" },
+  { name: "Chennai Airport", img: Images.ChennaiAirport, cat: "Transport", dist: "~4 km", time: "~10 min", angle: -45, r: 210, tag: "International" },
+  { name: "Velachery Station", img: Images.VelacherryRailwayStation, cat: "Transport", dist: "~1.5 km", time: "~5 min", angle: 0, r: 210, tag: "MRTS" },
+  { name: "Madipakkam Metro", img: Images.MetroStation, cat: "Transport", dist: "~5 km", time: "~12 min", angle: 45, r: 210, tag: "Metro" },
+  { name: "Iswarya Hospital", img: Images.IshwaryaHospital, cat: "Health", dist: "~1 km", time: "~3 min", angle: 90, r: 210, tag: "Multi-specialty" },
+  { name: "Guindy Park", img: Images.GuindyNationalPark, cat: "Leisure", dist: "3 km", time: "7 min", angle: 135, r: 210, tag: "National Park" },
+  { name: "IIT Madras", img: Images.IITMadras, cat: "Education", dist: "6 km", time: "12 min", angle: 180, r: 210, tag: "Premier Institute" },
+  { name: "Phoenix Mall", img: Images.PhoenixMarketcity, cat: "Leisure", dist: "5 km", time: "10 min", angle: -135, r: 210, tag: "Premium Retail" },
 ];
 
-// Filters excluding "All" as requested
 const categories = [...new Set(locations.map(l => l.cat))];
 
 export default function Locality() {
@@ -26,14 +25,13 @@ export default function Locality() {
 
   const filteredLocations = locations.filter(l => l.cat === activeCategory);
 
-  // Auto-cycle highlight flow within the active category
   useEffect(() => {
-    if (isPaused || filteredLocations.length <= 1) return;
+    if (isPaused) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % locations.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, [isPaused, filteredLocations.length]);
+  }, [isPaused]);
 
   const cx = 250;
   const cy = 250;
@@ -48,39 +46,25 @@ export default function Locality() {
 
   return (
     <section id="locality" className="bg-cream py-20 lg:py-32 px-6 relative overflow-hidden">
-      {/* Background patterns */}
       <div className="absolute inset-0 pointer-events-none opacity-20" 
            style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
         <div className="text-center mb-16">
-          <motion.span 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-gold text-[10px] tracking-[6px] font-semibold uppercase block mb-4"
-          >
-            Strategic Location
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-4xl lg:text-6xl text-royal-dark font-serif mb-6"
-          >
-            Connected to <em className="text-gold not-italic">Everything</em>
-          </motion.h2>
+          <motion.span initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} className="text-gold text-[10px] tracking-[6px] font-semibold uppercase block mb-4">Strategic Location</motion.span>
+          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-4xl lg:text-6xl text-royal-dark font-serif mb-6">Connected to <em className="text-gold not-italic">Everything</em></motion.h2>
           <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-          {/* LEFT: Orbit Canvas */}
-          <div className="lg:col-span-7 relative aspect-square max-w-[600px] mx-auto w-full">
-            {/* SVG Orbit Lines & Rings */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
+          {/* LEFT: Radial Layout matching the sketch */}
+          <div className="lg:col-span-7 relative aspect-square max-w-[550px] mx-auto w-full">
             <svg viewBox="0 0 500 500" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
-              <circle cx="250" cy="250" r="80" fill="none" stroke="rgba(184,150,87,0.08)" strokeWidth="1" />
-              <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(184,150,87,0.14)" strokeWidth="1" strokeDasharray="6 5" />
-              <circle cx="250" cy="250" r="220" fill="none" stroke="rgba(184,150,87,0.06)" strokeWidth="1" />
+              {/* Radial Circles from sketch */}
+              <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(184,150,87,0.1)" strokeWidth="1" />
+              <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(184,150,87,0.2)" strokeWidth="1.5" strokeDasharray="8 6" />
               
+              {/* Lines from center image to nodes */}
               {locations.map((loc, i) => {
                 const pos = getPosition(loc.angle, loc.r);
                 const isVisible = loc.cat === activeCategory;
@@ -88,27 +72,34 @@ export default function Locality() {
                   <motion.line
                     key={i}
                     x1="250" y1="250" x2={pos.x} y2={pos.y}
-                    className="transition-all duration-500"
-                    stroke={activeIndex === i ? "#B89657" : "rgba(184,150,87,0.2)"}
+                    stroke={activeIndex === i ? "#B89657" : "rgba(184,150,87,0.15)"}
                     strokeWidth={activeIndex === i ? "2" : "1"}
-                    strokeDasharray={activeIndex === i ? "8 4" : "5 6"}
+                    strokeDasharray={activeIndex === i ? "10 5" : "5 8"}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: isVisible ? 1 : 0.1 }}
+                    transition={{ duration: 0.5 }}
                   />
                 );
               })}
             </svg>
 
-            {/* Central Hub */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
-              <div className="relative w-28 h-28 p-1 bg-white rounded-full border border-gold/30 shadow-2xl flex flex-col items-center justify-center gap-1">
-                <div className="absolute inset-[-8px] border border-gold/10 rounded-full animate-ping opacity-20" />
-                <Home className="text-gold" size={24} />
-                <span className="text-[8px] tracking-[2px] uppercase text-royal-dark font-bold">Project</span>
-              </div>
+            {/* Central Hub: Square Image as shown in the sketch */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
+              <motion.div 
+                initial={{ scale: 0.8, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                className="relative w-40 h-32 md:w-48 md:h-36 p-1 bg-white border border-gold/30 shadow-2xl"
+              >
+                <div className="relative w-full h-full overflow-hidden">
+                  <Image src={Images.Locality} alt="Sai Ram Flats" fill className="object-cover" sizes="200px" />
+                </div>
+                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-gold text-white px-5 py-1.5 whitespace-nowrap text-[8px] font-bold tracking-[3px] uppercase shadow-xl">
+                  Sai Ram Flats
+                </div>
+              </motion.div>
             </div>
 
-            {/* Orbit Nodes */}
+            {/* Orbit Nodes: Positioned 45 degrees apart as per sketch placement */}
             {locations.map((loc, i) => {
               const pos = getPosition(loc.angle, loc.r);
               const isVisible = loc.cat === activeCategory;
@@ -136,9 +127,8 @@ export default function Locality() {
             })}
           </div>
 
-          {/* RIGHT: Detail Cards Panel */}
+          {/* RIGHT Panel: Filtered Cards */}
           <div className="lg:col-span-5 flex flex-col gap-6">
-            {/* Category Filters (No "All" button) */}
             <div className="flex flex-wrap gap-2 mb-2">
               {categories.map((cat) => (
                 <button
@@ -152,8 +142,7 @@ export default function Locality() {
               ))}
             </div>
 
-            {/* Scrollable Cards Stack */}
-            <div className="flex flex-col gap-4 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
+            <div className="flex flex-col gap-4 overflow-y-auto max-h-[550px] pr-2 custom-scrollbar">
               <AnimatePresence mode="popLayout">
                 {locations.filter(l => l.cat === activeCategory).map((loc) => {
                   const idx = locations.indexOf(loc);
@@ -165,7 +154,6 @@ export default function Locality() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      onClick={() => { setActiveIndex(isActive ? -1 : idx); setIsPaused(true); }}
                       onMouseEnter={() => { setActiveIndex(idx); setIsPaused(true); }}
                       onMouseLeave={() => setIsPaused(false)}
                       className={`bg-white border p-5 cursor-pointer transition-all duration-500 relative overflow-hidden group shadow-sm
