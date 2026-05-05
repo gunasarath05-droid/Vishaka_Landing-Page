@@ -18,27 +18,42 @@ const locations = [
 export default function Locality() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isFlipping, setIsFlipping] = useState(false);
 
+  // Auto-rotate every 6 seconds
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || isFlipping) return;
     const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % locations.length);
+      changePage((activeIndex + 1) % locations.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [isPaused]);
+  }, [activeIndex, isPaused, isFlipping]);
+
+  const changePage = (newIndex) => {
+    if (newIndex === activeIndex || isFlipping) return;
+    setIsFlipping(true);
+    // After the flip animation duration (0.8s), update content
+    setTimeout(() => {
+      setActiveIndex(newIndex);
+      setTimeout(() => setIsFlipping(false), 50);
+    }, 400); // half of total flip time – content changes mid-flip
+  };
+
+  const handleNodeClick = (idx) => {
+    if (idx === activeIndex) return;
+    setIsPaused(true);
+    changePage(idx);
+    // Resume auto-rotate after 10 seconds of inactivity
+    setTimeout(() => setIsPaused(false), 10000);
+  };
 
   const activeLoc = locations[activeIndex];
-  const nextLoc = locations[(activeIndex + 1) % locations.length];
 
   const cx = 250;
   const cy = 250;
-
   const getPosition = (angle, r) => {
     const rad = (angle * Math.PI) / 180;
-    return {
-      x: cx + r * Math.cos(rad),
-      y: cy + r * Math.sin(rad)
-    };
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   };
 
   return (
@@ -54,7 +69,7 @@ export default function Locality() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-          {/* LEFT: Radial Layout */}
+          {/* LEFT: Radial Diagram */}
           <div className="lg:col-span-6 relative aspect-square max-w-[500px] mx-auto w-full">
             <svg viewBox="0 0 500 500" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
               <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(184,150,87,0.1)" strokeWidth="1" />
@@ -88,7 +103,7 @@ export default function Locality() {
               </motion.div>
             </div>
 
-            {/* Orbit Nodes */}
+            {/* Orbit Nodes - clickable */}
             {locations.map((loc, i) => {
               const pos = getPosition(loc.angle, loc.r);
               return (
@@ -96,7 +111,7 @@ export default function Locality() {
                   key={i}
                   style={{ left: `${(pos.x / 500) * 100}%`, top: `${(pos.y / 500) * 100}%` }}
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer group"
-                  onClick={() => { setActiveIndex(i); setIsPaused(true); }}
+                  onClick={() => handleNodeClick(i)}
                 >
                   <div className={`w-12 h-12 rounded-full p-0.5 bg-white border border-gold/20 shadow-lg transition-all duration-500 overflow-hidden relative
                                  ${activeIndex === i ? "scale-125 border-gold shadow-gold/20" : "group-hover:scale-110"}`}>
@@ -107,83 +122,85 @@ export default function Locality() {
             })}
           </div>
 
-          {/* RIGHT: Segmented CSS Book Flip (Image Left, Details Right) */}
-          <div className="lg:col-span-6 flex flex-col items-center">
-            <div className="book-desk">
-              <div className="book-spread">
-                
-                {/* Left Page: Always Image */}
-                <div className="page left-static">
-                  <div className="image-container">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={activeIndex}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.8 }}
-                        className="relative w-full h-full"
-                      >
-                        <Image src={activeLoc.img} alt="" fill className="object-cover" />
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
+          {/* RIGHT: Segmented Open Book (Image-Left, Details-Right) */}
+          <div className="lg:col-span-6 flex flex-col items-center perspective-container">
+            <div className="book-spread">
+              
+              {/* Left Page - Image */}
+              <div className="page left-page">
+                <div className="image-container">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeIndex}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.4 }}
+                      className="relative w-full h-full"
+                    >
+                      <Image src={activeLoc.img} alt={activeLoc.name} fill className="object-cover" />
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
+              </div>
 
-                {/* Right Page: Always Details */}
-                <div className="page right-static">
-                  <div className="details-container">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={activeIndex}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.8 }}
-                        className="h-full flex flex-col justify-center"
-                      >
-                        <h3 className="font-serif text-3xl text-royal-dark mb-4">{activeLoc.name}</h3>
-                        <div className="space-y-4 text-[10px] tracking-[3px] uppercase text-royal-dark/60 font-bold">
-                          <p className="flex justify-between border-b border-gold/10 pb-2"><span>Category:</span> <span className="text-gold">{activeLoc.cat}</span></p>
-                          <p className="flex justify-between border-b border-gold/10 pb-2"><span>Distance:</span> <span className="text-gold">{activeLoc.dist}</span></p>
-                          <p className="flex justify-between border-b border-gold/10 pb-2"><span>Time Metric:</span> <span className="text-gold">{activeLoc.time}</span></p>
-                          <p className="flex justify-between"><span>Strategic Hub:</span> <span className="text-gold">{activeLoc.tag}</span></p>
-                        </div>
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
+              {/* Right Page - Details */}
+              <div className="page right-page">
+                <div className="details-container">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeIndex}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.4 }}
+                      className="h-full flex flex-col justify-center"
+                    >
+                      <h3 className="font-serif text-3xl text-royal-dark mb-4">{activeLoc.name}</h3>
+                      <div className="space-y-4 text-[10px] tracking-[3px] uppercase text-royal-dark/60 font-bold">
+                        <p className="flex justify-between border-b border-gold/10 pb-2"><span>Category:</span> <span className="text-gold">{activeLoc.cat}</span></p>
+                        <p className="flex justify-between border-b border-gold/10 pb-2"><span>Distance:</span> <span className="text-gold">{activeLoc.dist}</span></p>
+                        <p className="flex justify-between border-b border-gold/10 pb-2"><span>Time Metric:</span> <span className="text-gold">{activeLoc.time}</span></p>
+                        <p className="flex justify-between"><span>Strategic Hub:</span> <span className="text-gold">{activeLoc.tag}</span></p>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
+              </div>
 
-                {/* The Flipping Overlay (Matches CSS segments) */}
-                <div className="flips-container">
-                   <div className="flip-segment s1">
-                      <div className="flip-segment s2">
-                        <div className="flip-segment s3">
-                          <div className="flip-segment s4">
-                            <div className="flip-segment s5">
-                              <div className="flip-segment s6">
-                                <div className="flip-segment s7"></div>
-                              </div>
-                            </div>
+              {/* Animated Segmented 3D Flip Overlay */}
+              <div className="flips-container">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ rotateY: 0 }}
+                  animate={{ rotateY: isFlipping ? -180 : 0 }}
+                  transition={{ duration: 0.8, ease: [0.645, 0.045, 0.355, 1] }}
+                  className="flip-segment s1"
+                >
+                  <div className="flip-segment s2">
+                    <div className="flip-segment s3">
+                      <div className="flip-segment s4">
+                        <div className="flip-segment s5">
+                          <div className="flip-segment s6">
+                            <div className="flip-segment s7"></div>
                           </div>
                         </div>
                       </div>
-                   </div>
-                </div>
-
-                <div className="book-gap"></div>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
+
+              <div className="book-gap"></div>
             </div>
           </div>
         </div>
       </div>
 
       <style jsx>{`
-        .book-desk {
+        .perspective-container {
           perspective: 1200px;
           perspective-origin: center 50px;
-          transform: scale(1.1);
-          filter: drop-shadow(0px 20px 40px rgba(0, 0, 0, 0.15));
         }
 
         .book-spread {
@@ -191,33 +208,31 @@ export default function Locality() {
           width: 480px;
           height: 320px;
           transform-style: preserve-3d;
+          transform: scale(1.05) rotateX(8deg);
+          filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
         }
 
         .page {
+          position: absolute;
           width: 240px;
           height: 320px;
           background: white;
-          position: absolute;
           top: 0;
-          border: 1px solid rgba(0,0,0,0.1);
-          transform-style: preserve-3d;
           box-shadow: inset 3px 0 10px rgba(0,0,0,0.05);
-        }
-
-        .left-static {
-          right: 50%;
-          transform: rotateX(25deg) rotateY(3deg);
-          transform-origin: 100% 100%;
-          border-radius: 4px 0 0 4px;
+          border: 1px solid rgba(0,0,0,0.08);
           overflow: hidden;
         }
 
-        .right-static {
-          left: 50%;
-          transform: rotateX(25deg) rotateY(-3deg);
-          transform-origin: 0% 100%;
+        .left-page {
+          left: 0;
+          border-radius: 4px 0 0 4px;
+        }
+
+        .right-page {
+          left: 240px;
           border-radius: 0 4px 4px 0;
           padding: 30px;
+          background: linear-gradient(145deg, #ffffff 0%, #fcfcfc 100%);
         }
 
         .image-container {
@@ -227,66 +242,57 @@ export default function Locality() {
         }
 
         .book-gap {
-          width: 4px;
-          height: 320px;
-          background: rgba(0,0,0,0.1);
           position: absolute;
           left: 50%;
-          transform: translateX(-50%) rotateX(25deg);
+          transform: translateX(-50%);
+          width: 2px;
+          height: 100%;
+          background: rgba(0,0,0,0.1);
           z-index: 100;
         }
 
-        /* Flipping Segments Animation Logic */
         .flips-container {
           position: absolute;
           top: 0;
-          right: 50%;
+          left: 240px;
           width: 240px;
           height: 320px;
           pointer-events: none;
           transform-style: preserve-3d;
+          z-index: 50;
         }
 
         .flip-segment {
-          width: 34px; /* 240 / 7 segments approx */
+          width: 34.2px;
           height: 100%;
           position: absolute;
           top: 0;
-          transform-origin: 100% 100%;
-          right: 100%;
-          border: solid rgba(0,0,0,0.05);
-          border-width: 1px 0;
+          transform-origin: 0% center;
+          left: 100%;
           background: white;
+          border: 1px solid rgba(0,0,0,0.05);
+          border-width: 0 1px;
           transform-style: preserve-3d;
         }
 
         .s1 {
-          right: 0;
-          width: 34px;
-          animation: flipMove 6s infinite ease-in-out;
-          border-width: 1px 1px 1px 0;
+          left: 0;
+          width: 34.2px;
+          transform-origin: left center;
         }
 
         .flip-segment:not(.s1) {
-          right: calc(100% - 1px);
-          top: -1px;
-          transform-origin: right;
-          animation: flipCurl 6s infinite ease-in-out;
+          left: calc(100% - 1px);
+          transform-origin: left;
         }
 
-        @keyframes flipMove {
-          0%, 10% { transform: rotateX(25deg) rotateY(-3deg); }
-          50%, 100% { transform: rotateX(25deg) rotateY(-177deg); }
-        }
-
-        @keyframes flipCurl {
-          0%, 10% { transform: rotateY(0deg); }
-          30%, 70% { transform: rotateY(-12deg); }
-          90%, 100% { transform: rotateY(0deg); }
-        }
-
-        .s7 {
-          border-width: 1px 0 1px 1px;
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+          .book-spread { transform: scale(0.9) rotateX(6deg); width: 400px; height: 280px; }
+          .page { width: 200px; height: 280px; }
+          .right-page { left: 200px; padding: 20px; }
+          .flips-container { left: 200px; width: 200px; height: 280px; }
+          .flip-segment { width: 28.5px; }
         }
       `}</style>
     </section>
