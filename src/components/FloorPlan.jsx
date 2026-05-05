@@ -56,7 +56,7 @@ export default function FloorPlan() {
   };
 
   return (
-    <section id="floor-plan" className="bg-white py-16 md:py-24 px-4 md:px-8 relative overflow-hidden font-sans">
+    <section id="floor-plan" className="bg-white py-16 md:py-24 px-4 md:px-8 relative overflow-hidden font-sans luxury-pattern-light">
       <div className="absolute inset-0 pointer-events-none z-0" style={bgGrid} />
 
       <div className="max-w-[1400px] mx-auto relative z-10">

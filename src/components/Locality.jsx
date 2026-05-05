@@ -36,7 +36,7 @@ export default function Locality() {
   };
 
   const localityCards = React.useMemo(() => locations.map((loc, i) => (
-    <div key={i} className="w-full h-full bg-white relative group overflow-hidden">
+    <div key={i} className="w-full h-full bg-white relative group overflow-hidden luxury-pat">
       {/* Top Image */}
       <div className="relative w-full h-1/2 overflow-hidden">
         <Image src={loc.img} alt={loc.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="400px" loading="eager" />
