@@ -67,16 +67,15 @@ export default function Locality() {
               {/* Lines from center image to nodes */}
               {locations.map((loc, i) => {
                 const pos = getPosition(loc.angle, loc.r);
-                const isVisible = loc.cat === activeCategory;
                 return (
                   <motion.line
                     key={i}
                     x1="250" y1="250" x2={pos.x} y2={pos.y}
-                    stroke={activeIndex === i ? "#B89657" : "rgba(184,150,87,0.15)"}
-                    strokeWidth={activeIndex === i ? "2" : "1"}
+                    stroke={activeIndex === i ? "#B89657" : "rgba(184,150,87,0.3)"}
+                    strokeWidth={activeIndex === i ? "2" : "1.5"}
                     strokeDasharray={activeIndex === i ? "10 5" : "5 8"}
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: isVisible ? 1 : 0.1 }}
+                    animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   />
                 );
@@ -102,12 +101,11 @@ export default function Locality() {
             {/* Orbit Nodes: Positioned 45 degrees apart as per sketch placement */}
             {locations.map((loc, i) => {
               const pos = getPosition(loc.angle, loc.r);
-              const isVisible = loc.cat === activeCategory;
               return (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, scale: 0 }}
-                  whileInView={{ opacity: isVisible ? 1 : 0.15, scale: 1 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   style={{ left: `${(pos.x / 500) * 100}%`, top: `${(pos.y / 500) * 100}%` }}
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer group"
                   onMouseEnter={() => { setActiveIndex(i); setIsPaused(true); }}
@@ -116,15 +114,16 @@ export default function Locality() {
                   <div className={`w-16 h-16 rounded-full p-1 bg-white border border-gold/20 shadow-xl transition-all duration-500 overflow-hidden relative
                                  ${activeIndex === i ? "scale-125 border-gold shadow-gold/20" : "group-hover:scale-110 group-hover:border-gold/50"}`}>
                     <Image src={loc.img} alt={loc.name} fill className="object-cover" sizes="64px" />
-                    <div className={`absolute inset-0 bg-gold/10 transition-opacity duration-500 ${activeIndex === i ? "opacity-0" : "opacity-40 group-hover:opacity-0"}`} />
+                    <div className={`absolute inset-0 bg-gold/5 transition-opacity duration-500 ${activeIndex === i ? "opacity-0" : "opacity-20 group-hover:opacity-0"}`} />
                   </div>
                   <span className={`absolute top-full mt-3 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-bold tracking-wider transition-colors duration-300
-                                 ${activeIndex === i ? "text-gold" : "text-royal-dark/40"}`}>
+                                 ${activeIndex === i ? "text-gold" : "text-royal-dark/70"}`}>
                     {loc.name.split(" ")[0]}
                   </span>
                 </motion.div>
               );
             })}
+
           </div>
 
           {/* RIGHT Panel: Filtered Cards */}
