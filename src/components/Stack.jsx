@@ -52,6 +52,7 @@ export default function Stack({
   pauseOnHover = false,
   mobileClickOnly = false,
   mobileBreakpoint = 768,
+  activeCardId = null, // External trigger
   onCardChange = () => {} // Added to sync with external state
 }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -73,6 +74,21 @@ export default function Stack({
   const [stack, setStack] = useState(() => {
     return cards.map((content, index) => ({ id: index, content }));
   });
+
+  // Handle external trigger to move a specific card to top
+  useEffect(() => {
+    if (activeCardId !== null) {
+      setStack(prev => {
+        const index = prev.findIndex(card => card.id === activeCardId);
+        if (index === -1 || index === prev.length - 1) return prev;
+        
+        const newStack = [...prev];
+        const [card] = newStack.splice(index, 1);
+        newStack.push(card); // Move to top
+        return newStack;
+      });
+    }
+  }, [activeCardId]);
 
   useEffect(() => {
     if (cards.length) {

@@ -124,6 +124,8 @@ export default function Locality() {
                   key={i}
                   style={{ left: `${(pos.x / 500) * 100}%`, top: `${(pos.y / 500) * 100}%` }}
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer group"
+                  onMouseEnter={() => setActiveIndex(i)}
+                  onClick={() => setActiveIndex(i)}
                 >
                   <div className={`w-14 h-14 rounded-full p-1 bg-white border border-gold/20 shadow-xl transition-all duration-500 overflow-hidden relative
                                  ${activeIndex === i ? "scale-125 border-gold shadow-gold/20" : "group-hover:scale-110"}`}>
@@ -148,6 +150,7 @@ export default function Locality() {
                   sendToBackOnClick={true}
                   autoplay={true}
                   autoplayDelay={4000}
+                  activeCardId={activeIndex}
                   onCardChange={(id) => setActiveIndex(id)}
                 />
              </div>
