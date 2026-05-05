@@ -45,61 +45,7 @@ export default function Hero() {
       </div>
 
       {/* Hero Content & Form Overlay */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 pt-12 lg:pt-32 pb-20 lg:pb-0 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
-        
-        {/* Left Side: Text Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-2xl w-full"
-        >
-          <div className="inline-flex items-center gap-3 border border-gold/30 px-5 py-2 mb-8 bg-gold/5 backdrop-blur-sm">
-            <span className="text-gold text-[10px] tracking-[4px] uppercase">
-              ◆ Luxury Plotted Development · Chennai
-            </span>
-          </div>
-
-          <h1 className="text-royal-dark font-light leading-[1.1] mb-6">
-            <span className="block text-4xl lg:text-7xl font-serif">Own Your</span>
-            <span className="block text-5xl lg:text-8xl font-serif text-gold italic font-semibold">Dream Plot</span>
-            <span className="block text-sm lg:text-base font-sans mt-4 text-royal-dark/40 tracking-[5px] uppercase">
-              In the heart of the city
-            </span>
-          </h1>
-
-          <p className="text-royal-dark/70 text-sm lg:text-base leading-relaxed mb-10 max-w-lg">
-            Discover premium DTCP-approved plotted developments crafted for those who believe land is the finest investment. Secure your legacy today.
-          </p>
-
-          <div className="flex flex-wrap gap-4 mb-12">
-            <button
-              onClick={() => document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })}
-              className="btn-gold px-10 py-4 text-xs font-bold tracking-[3px] uppercase shadow-lg shadow-gold/20 cursor-pointer"
-            >
-              Book Site Visit
-            </button>
-            <button
-              onClick={() => document.getElementById('floor-plan')?.scrollIntoView({ behavior: 'smooth' })}
-              className="border border-gold/30 text-gold hover:bg-gold/10 px-10 py-4 text-xs font-bold tracking-[3px] uppercase transition-all cursor-pointer"
-            >
-              View Site Plan
-            </button>
-          </div>
-
-          <div className="flex gap-8 lg:gap-12 pt-8 border-t border-gold/20">
-            {[
-              { num: "45+", label: "Projects Done" },
-              { num: "250+", label: "Happy Families" },
-              { num: "15+", label: "Years Trust" },
-            ].map((stat, i) => (
-              <div key={i}>
-                <div className="text-gold font-serif text-3xl lg:text-4xl font-bold">{stat.num}</div>
-                <div className="text-royal-dark/40 text-[9px] tracking-[2px] uppercase mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+      <div className="relative z-10 w-full max-w-7xl mx-auto lg:left-[34%]">
 
         {/* Right Side: Static Consultation Form (Responsive) */}
         <motion.div
