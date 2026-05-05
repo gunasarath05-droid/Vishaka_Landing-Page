@@ -94,7 +94,7 @@ export default function Stack({
     if (cards.length && cards.length !== stack.length) {
       setStack(cards.map((content, index) => ({ id: index, content })));
     }
-  }, [cards, stack.length]);
+  }, [cards]);
 
 
   const sendToBack = (id) => {
