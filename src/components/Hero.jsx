@@ -85,7 +85,7 @@ export default function Hero() {
       </div>
 
       {/* Premium Popup Consultation Form (Automated) */}
-      {/* <AnimatePresence>
+      <AnimatePresence>
         {isOpen && (
           <>
            
@@ -143,7 +143,7 @@ export default function Hero() {
             </motion.div>
           </>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
 
     </section>
   );
