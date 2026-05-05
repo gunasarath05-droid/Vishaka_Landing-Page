@@ -43,14 +43,14 @@ export default function Locality() {
 
   return (
     <section id="locality" className="bg-cream py-20 lg:py-32 px-6 relative overflow-hidden font-sans">
-      <div className="absolute inset-0 pointer-events-none opacity-20" 
-           style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+      <div className="absolute inset-0 pointer-events-none opacity-20"
+        style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="text-center mb-16">
-          <motion.span className="text-gold text-[10px] tracking-[6px] font-semibold uppercase block mb-4">Strategic Location</motion.span>
-          <motion.h2 className="text-4xl lg:text-6xl text-royal-dark font-serif mb-6">Connected to <em className="text-gold not-italic">Everything</em></motion.h2>
-          <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto" />
+        <div className="text-center mb-12">
+          <span className="text-gold text-[10px] tracking-[5px] font-semibold uppercase block mb-4">Strategic Location</span>
+          <h2 className="section-title text-4xl md:text-5xl text-deep">Connected to Everything</h2>
+          <div className="w-16 h-0.5 bg-gradient-to-r from-gold to-transparent mx-auto mt-6" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
@@ -59,7 +59,7 @@ export default function Locality() {
             <svg viewBox="0 0 500 500" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
               <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(184,150,87,0.1)" strokeWidth="1" />
               <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(184,150,87,0.2)" strokeWidth="1.5" strokeDasharray="8 6" />
-              
+
               {locations.map((loc, i) => {
                 const pos = getPosition(loc.angle, loc.r);
                 return (
@@ -132,15 +132,15 @@ export default function Locality() {
                   initial={{ rotateY: 45, x: 30, opacity: 0 }}
                   animate={{ rotateY: 0, x: 0, opacity: 1 }}
                   exit={{ rotateY: -110, x: -60, opacity: 0 }}
-                  transition={{ 
-                    duration: 0.8, 
+                  transition={{
+                    duration: 0.8,
                     ease: [0.645, 0.045, 0.355, 1], // Cubic-bezier for paper-like movement
                   }}
                   className="bg-white shadow-2xl rounded-r-2xl overflow-hidden border border-gold/10 relative"
                   style={{ transformOrigin: "left center", backfaceVisibility: "hidden" }}
                 >
                   {/* Page Highlight/Shadow effect during turn */}
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 0 }}
                     exit={{ opacity: 0.4 }}
