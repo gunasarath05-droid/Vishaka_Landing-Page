@@ -44,13 +44,15 @@ export default function Hero() {
         />
       </div>
 
-      {/* Hero Content Overlay */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 pt-12 lg:pt-24 pb-20 lg:pb-0">
+      {/* Hero Content & Form Overlay */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 pt-12 lg:pt-32 pb-20 lg:pb-0 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+        
+        {/* Left Side: Text Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-2xl"
+          className="max-w-2xl w-full"
         >
           <div className="inline-flex items-center gap-3 border border-gold/30 px-5 py-2 mb-8 bg-gold/5 backdrop-blur-sm">
             <span className="text-gold text-[10px] tracking-[4px] uppercase">
@@ -72,13 +74,13 @@ export default function Hero() {
 
           <div className="flex flex-wrap gap-4 mb-12">
             <button
-              onClick={() => document.getElementById('cta').scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })}
               className="btn-gold px-10 py-4 text-xs font-bold tracking-[3px] uppercase shadow-lg shadow-gold/20 cursor-pointer"
             >
               Book Site Visit
             </button>
             <button
-              onClick={() => document.getElementById('floor-plan').scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('floor-plan')?.scrollIntoView({ behavior: 'smooth' })}
               className="border border-gold/30 text-gold hover:bg-gold/10 px-10 py-4 text-xs font-bold tracking-[3px] uppercase transition-all cursor-pointer"
             >
               View Site Plan
@@ -98,9 +100,45 @@ export default function Hero() {
             ))}
           </div>
         </motion.div>
+
+        {/* Right Side: Static Consultation Form (Responsive) */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="w-full lg:w-[400px] glass p-8 lg:p-10 border border-gold/20 shadow-2xl relative"
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
+          
+          <h3 className="text-royal-dark font-serif text-2xl lg:text-3xl mb-1">Get Free Consultation</h3>
+          <p className="text-royal-dark/40 text-[10px] tracking-wider mb-8">Our advisor will call you within 30 mins</p>
+
+          <form className="space-y-5">
+            <div className="relative group">
+              <input type="text" placeholder="Your Full Name" className="w-full bg-royal-dark/5 border border-gold/10 p-4 text-royal-dark text-sm outline-none focus:border-gold transition-all" />
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-focus-within:w-full transition-all duration-500" />
+            </div>
+            
+            <div className="relative group">
+              <input type="tel" placeholder="Mobile Number" className="w-full bg-royal-dark/5 border border-gold/10 p-4 text-royal-dark text-sm outline-none focus:border-gold transition-all" />
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-focus-within:w-full transition-all duration-500" />
+            </div>
+            
+            <button className="w-full bg-gold-dark text-white py-5 text-[10px] font-bold tracking-[4px] uppercase mt-4 hover:bg-maroon transition-all duration-500 shadow-xl group flex items-center justify-center gap-3">
+              Request Callback
+              <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
+            </button>
+          </form>
+          
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <div className="h-px flex-1 bg-gold/10" />
+            <span className="text-[8px] text-emerald-dark tracking-[2px] uppercase">Exclusive Pre-Launch Offer</span>
+            <div className="h-px flex-1 bg-gold/10" />
+          </div>
+        </motion.div>
       </div>
 
-      {/* Premium Popup Consultation Form */}
+      {/* Premium Popup Consultation Form (Automated) */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -164,5 +202,3 @@ export default function Hero() {
     </section>
   );
 }
-
-
