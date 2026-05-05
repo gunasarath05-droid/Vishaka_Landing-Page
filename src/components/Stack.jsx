@@ -91,10 +91,11 @@ export default function Stack({
   }, [activeCardId]);
 
   useEffect(() => {
-    if (cards.length) {
+    if (cards.length && cards.length !== stack.length) {
       setStack(cards.map((content, index) => ({ id: index, content })));
     }
-  }, [cards]);
+  }, [cards, stack.length]);
+
 
   const sendToBack = (id) => {
     setStack(prev => {

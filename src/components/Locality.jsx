@@ -31,7 +31,7 @@ export default function Locality() {
     };
   };
 
-  const localityCards = locations.map((loc, i) => (
+  const localityCards = React.useMemo(() => locations.map((loc, i) => (
     <div key={i} className="w-full h-full bg-white relative group overflow-hidden">
       {/* Top Image */}
       <div className="relative w-full h-1/2 overflow-hidden">
@@ -68,7 +68,8 @@ export default function Locality() {
         </div>
       </div>
     </div>
-  ));
+  )), []);
+
 
   return (
     <section id="locality" className="bg-cream py-20 lg:py-32 px-6 relative overflow-hidden font-sans">
