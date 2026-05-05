@@ -19,7 +19,6 @@ export default function Locality() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Auto-cycle highlight flow
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
@@ -43,13 +42,13 @@ export default function Locality() {
 
   return (
     <section id="locality" className="bg-cream py-20 lg:py-32 px-6 relative overflow-hidden font-sans">
-      <div className="absolute inset-0 pointer-events-none opacity-20"
-        style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+      <div className="absolute inset-0 pointer-events-none opacity-20" 
+           style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <span className="text-gold text-[10px] tracking-[5px] font-semibold uppercase block mb-4">Strategic Location</span>
-          <h2 className="section-title text-4xl md:text-5xl text-deep">Connected to Everything</h2>
+          <h2 className="section-title text-4xl md:text-5xl text-deep font-serif">Connected to Everything</h2>
           <div className="w-16 h-0.5 bg-gradient-to-r from-gold to-transparent mx-auto mt-6" />
         </div>
 
@@ -59,7 +58,7 @@ export default function Locality() {
             <svg viewBox="0 0 500 500" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
               <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(184,150,87,0.1)" strokeWidth="1" />
               <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(184,150,87,0.2)" strokeWidth="1.5" strokeDasharray="8 6" />
-
+              
               {locations.map((loc, i) => {
                 const pos = getPosition(loc.angle, loc.r);
                 return (
@@ -114,45 +113,44 @@ export default function Locality() {
             })}
           </div>
 
-          {/* RIGHT: Notebook Style Card with Enhanced Animation */}
+          {/* RIGHT: Realistic 3D Flipping Notebook */}
           <div className="lg:col-span-5 flex flex-col items-center">
-            {/* Notebook Page Container */}
-            <div className="relative w-full max-w-[400px] perspective-2000 mt-12 lg:mt-0">
-
-              {/* Spiral/Rings on the left */}
-              <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+            <div className="relative w-full max-w-[400px] perspective-630 mt-12 lg:mt-0">
+              
+              {/* Spine/Binding rings */}
+              <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-50">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="w-8 h-2 bg-gradient-to-r from-gray-400 to-gray-200 rounded-full shadow-md border border-gray-300" />
                 ))}
               </div>
 
-              {/* Background 'Stacked' Page (Blurred) */}
-              <div className="absolute inset-0 bg-white/40 shadow-xl rounded-r-2xl border border-gold/5 blur-[2px] transform translate-x-1 translate-y-1 -z-10" />
+              {/* Background 'Stacked' Pages for 3D depth */}
+              <div className="absolute inset-0 bg-white/80 shadow-md rounded-r-2xl border border-gold/5 transform translate-x-1 translate-y-1 -z-10" />
+              <div className="absolute inset-0 bg-white/60 shadow-md rounded-r-2xl border border-gold/5 transform translate-x-2 translate-y-2 -z-20 blur-[1px]" />
 
               <AnimatePresence mode="wait">
-
                 <motion.div
                   key={activeIndex}
-                  initial={{ rotateY: 90, skewY: 10, x: 60, opacity: 0, filter: "blur(10px)" }}
-                  animate={{ rotateY: 0, skewY: 0, x: 0, opacity: 1, filter: "blur(0px)" }}
-                  exit={{ rotateY: -110, skewY: -15, x: -80, opacity: 0, filter: "blur(10px)" }}
-                  transition={{
-                    duration: 0.9,
-                    ease: [0.645, 0.045, 0.355, 1], // Custom cubic-bezier for realistic paper movement
+                  initial={{ rotateY: 170, opacity: 0.5, x: -20, filter: "blur(4px)" }}
+                  animate={{ rotateY: 0, opacity: 1, x: 0, filter: "blur(0px)" }}
+                  exit={{ rotateY: -170, opacity: 0.5, x: -20, filter: "blur(4px)" }}
+                  transition={{ 
+                    duration: 1.2, 
+                    ease: [0.645, 0.045, 0.355, 1], // Physical page flip ease
                   }}
-                  className="bg-white shadow-2xl rounded-r-2xl overflow-hidden border border-gold/10 relative"
-                  style={{ transformOrigin: "left center", backfaceVisibility: "hidden" }}
+                  className="bg-white shadow-[0_10px_25px_rgba(0,0,0,0.15)] rounded-r-2xl overflow-hidden border border-gold/10 relative min-h-[580px] origin-left preserve-3d"
+                  style={{ transformStyle: "preserve-3d" }}
                 >
-                  {/* Sweeping Page Turn Shadow effect */}
+                  {/* Page Highlight/Shadow sweeping across */}
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0 }}
-                    exit={{ opacity: 0.5 }}
-                    transition={{ duration: 0.5 }}
-                    className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent z-30 pointer-events-none"
+                    initial={{ opacity: 0, x: "100%" }}
+                    animate={{ opacity: 0, x: "100%" }}
+                    exit={{ opacity: 0.3, x: "-100%" }}
+                    transition={{ duration: 1.2 }}
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-black/20 to-transparent z-40 pointer-events-none"
                   />
 
-                  {/* Notebook Paper Texture Overlay */}
+                  {/* Notebook Paper Texture */}
                   <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 23px, #000 24px)' }} />
 
                   {/* Top: Image Section */}
@@ -172,25 +170,22 @@ export default function Locality() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-y-8 gap-x-12">
-                      {[
-                        { label: "Category", value: activeLoc.cat },
-                        { label: "Status", value: activeLoc.tag, status: true },
-                        { label: "Reach", value: activeLoc.dist, big: true },
-                        { label: "Travel Time", value: activeLoc.time }
-                      ].map((item, idx) => (
-                        <motion.div 
-                          key={item.label}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.4 + idx * 0.1 }}
-                          className="space-y-1"
-                        >
-                          <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">{item.label}</p>
-                          <p className={`text-royal-dark/70 ${item.status ? "font-bold text-gold italic" : item.big ? "font-serif font-semibold italic text-xl text-royal-dark" : "text-sm font-medium"}`}>
-                            {item.value}
-                          </p>
-                        </motion.div>
-                      ))}
+                      <div className="space-y-1">
+                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Category</p>
+                        <p className="text-sm font-medium text-royal-dark/70">{activeLoc.cat}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Status</p>
+                        <p className="text-sm font-bold text-gold italic">{activeLoc.tag}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Reach</p>
+                        <p className="text-sm font-serif text-royal-dark font-semibold italic text-xl">{activeLoc.dist}</p>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Travel Time</p>
+                        <p className="text-sm font-medium text-royal-dark/60">{activeLoc.time}</p>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -201,7 +196,8 @@ export default function Locality() {
       </div>
 
       <style jsx global>{`
-        .perspective-2000 { perspective: 2000px; }
+        .perspective-630 { perspective: 630px; }
+        .preserve-3d { transform-style: preserve-3d; }
       `}</style>
     </section>
   );
