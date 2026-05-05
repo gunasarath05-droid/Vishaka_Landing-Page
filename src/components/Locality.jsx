@@ -15,10 +15,7 @@ const locations = [
   { name: "Phoenix Mall", img: Images.PhoenixMarketcity, cat: "Leisure", dist: "5 km", time: "10 min", angle: -135, r: 210, tag: "Premium Retail" },
 ];
 
-const categories = [...new Set(locations.map(l => l.cat))];
-
 export default function Locality() {
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -119,22 +116,9 @@ export default function Locality() {
 
           {/* RIGHT: Notebook Style Card */}
           <div className="lg:col-span-5 flex flex-col items-center">
-            {/* Filters */}
-            <div className="flex flex-wrap gap-2 mb-8 justify-center">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => { setActiveCategory(cat); setActiveIndex(locations.findIndex(l => l.cat === cat)); }}
-                  className={`text-[9px] font-bold tracking-[2px] uppercase px-4 py-2 border transition-all duration-300
-                             ${activeCategory === cat ? "bg-gold text-white border-gold" : "bg-white border-gold/20 text-royal-dark/40"}`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-
             {/* Notebook Page Container */}
-            <div className="relative w-full max-w-[400px] perspective-1000">
+            <div className="relative w-full max-w-[400px] perspective-1000 mt-12 lg:mt-0">
+
               {/* Spiral/Rings on the left */}
               <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
                 {[...Array(6)].map((_, i) => (
@@ -187,13 +171,6 @@ export default function Locality() {
                       <div className="space-y-1">
                         <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">Travel Time</p>
                         <p className="text-sm font-medium text-royal-dark/60">{activeLoc.time}</p>
-                      </div>
-                    </div>
-
-                    {/* Signature/Stamp look */}
-                    <div className="flex justify-end pt-4">
-                      <div className="w-16 h-16 border-2 border-gold/20 rounded-full flex items-center justify-center -rotate-12">
-                        <span className="text-gold/40 text-[8px] font-bold tracking-widest uppercase text-center leading-none">Verified<br/>Site</span>
                       </div>
                     </div>
                   </div>
