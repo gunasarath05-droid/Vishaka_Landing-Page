@@ -11,7 +11,7 @@ export default function Hero() {
   // Auto-popup every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsOpen(false);
+      setIsOpen(true);
     }, 10000);
     return () => clearInterval(interval);
   }, []);
@@ -55,7 +55,7 @@ export default function Hero() {
           className="w-full lg:w-[400px] glass p-8 lg:p-10 border border-gold/20 shadow-2xl relative"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
-          
+
           <h3 className="text-royal-dark font-serif text-2xl lg:text-3xl mb-1">Get Free Consultation</h3>
           <p className="text-royal-dark/40 text-[10px] tracking-wider mb-8">Our advisor will call you within 30 mins</p>
 
@@ -64,18 +64,18 @@ export default function Hero() {
               <input type="text" placeholder="Your Full Name" className="w-full bg-royal-dark/5 border border-gold/10 p-4 text-royal-dark text-sm outline-none focus:border-gold transition-all" />
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-focus-within:w-full transition-all duration-500" />
             </div>
-            
+
             <div className="relative group">
               <input type="tel" placeholder="Mobile Number" className="w-full bg-royal-dark/5 border border-gold/10 p-4 text-royal-dark text-sm outline-none focus:border-gold transition-all" />
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold group-focus-within:w-full transition-all duration-500" />
             </div>
-            
+
             <button className="w-full bg-gold-dark text-white py-5 text-[10px] font-bold tracking-[4px] uppercase mt-4 hover:bg-maroon transition-all duration-500 shadow-xl group flex items-center justify-center gap-3">
               Request Callback
               <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
             </button>
           </form>
-          
+
           <div className="mt-8 flex items-center justify-center gap-4">
             <div className="h-px flex-1 bg-gold/10" />
             <span className="text-[8px] text-emerald-dark tracking-[2px] uppercase">Exclusive Pre-Launch Offer</span>
@@ -85,10 +85,10 @@ export default function Hero() {
       </div>
 
       {/* Premium Popup Consultation Form (Automated) */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {isOpen && (
           <>
-            {/* Backdrop */}
+           
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -97,7 +97,7 @@ export default function Hero() {
               className="fixed inset-0 bg-deep/60 backdrop-blur-md z-[1000] cursor-pointer"
             />
 
-            {/* Popup Content */}
+          
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20, x: "-50%" }}
               animate={{ opacity: 1, scale: 1, y: 0, x: "-50%" }}
@@ -105,7 +105,7 @@ export default function Hero() {
               className="fixed left-1/2 top-1/2 -translate-y-1/2 w-[92%] max-w-md glass p-8 md:p-10 border border-gold/20 shadow-2xl z-[1001]"
               style={{ transform: "translate(-50%, -50%)" }}
             >
-              {/* Close Button */}
+              
               <button
                 onClick={() => setIsOpen(false)}
                 className="absolute -top-4 -right-4 w-10 h-10 bg-gold text-white rounded-full flex items-center justify-center shadow-lg hover:bg-maroon transition-colors z-[1002]"
@@ -143,7 +143,7 @@ export default function Hero() {
             </motion.div>
           </>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
     </section>
   );

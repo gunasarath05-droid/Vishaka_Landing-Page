@@ -21,12 +21,23 @@ const locations = [
 const categories = ["All", ...new Set(locations.map(l => l.cat))];
 
 export default function Locality() {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeCategory] = useState("All");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const filteredLocations = locations.filter(l => activeCategory === "All" || l.cat === activeCategory);
 
+  // Auto-cycle highlight flow
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % filteredLocations.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [isPaused, filteredLocations.length]);
+
   const cx = 250;
+
   const cy = 250;
 
   const getPosition = (angle, r) => {
@@ -116,8 +127,8 @@ export default function Locality() {
                   whileInView={{ opacity: isVisible ? 1 : 0.2, scale: 1 }}
                   style={{ left: `${(pos.x / 500) * 100}%`, top: `${(pos.y / 500) * 100}%` }}
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer group"
-                  onMouseEnter={() => setActiveIndex(i)}
-                  onMouseLeave={() => setActiveIndex(-1)}
+                  onMouseEnter={() => { setActiveIndex(i); setIsPaused(true); }}
+                  onMouseLeave={() => setIsPaused(false)}
                 >
                   <div className={`w-14 h-14 rounded-full bg-[#150F04] border border-gold/25 flex items-center justify-center transition-all duration-500 relative
                                  ${activeIndex === i ? "scale-125 border-gold bg-[#2A1E00] shadow-[0_0_20px_rgba(201,168,76,0.2)]" : "group-hover:scale-110 group-hover:border-gold/50"}`}>
@@ -135,22 +146,9 @@ export default function Locality() {
 
           {/* RIGHT: Detail Cards Panel */}
           <div className="lg:col-span-5 flex flex-col gap-6">
-            {/* Category Filters */}
-            <div className="flex flex-wrap gap-2 mb-2">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => { setActiveCategory(cat); setActiveIndex(-1); }}
-                  className={`text-[8px] font-bold tracking-[2px] uppercase px-4 py-2 border transition-all duration-300
-                             ${activeCategory === cat ? "bg-gold/10 border-gold text-[#E4C97E]" : "border-gold/20 text-white/30 hover:border-gold/50 hover:text-white/60"}`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-
             {/* Scrollable Cards Stack */}
             <div className="flex flex-col gap-4 overflow-y-auto max-h-[600px] pr-2 custom-scrollbar">
+
               <AnimatePresence mode="popLayout">
                 {filteredLocations.map((loc) => {
                   const idx = locations.indexOf(loc);
@@ -163,8 +161,8 @@ export default function Locality() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       onClick={() => setActiveIndex(isActive ? -1 : idx)}
-                      onMouseEnter={() => setActiveIndex(idx)}
-                      onMouseLeave={() => setActiveIndex(-1)}
+                      onMouseEnter={() => { setActiveIndex(idx); setIsPaused(true); }}
+                      onMouseLeave={() => setIsPaused(false)}
                       className={`bg-[#120E03] border p-5 cursor-pointer transition-all duration-500 relative overflow-hidden group
                                  ${isActive ? "border-gold/40 bg-[#1C1604]" : "border-gold/10 hover:border-gold/30 hover:bg-[#151105]"}`}
                     >
