@@ -52,17 +52,18 @@ export default function Stack({
   pauseOnHover = false,
   mobileClickOnly = false,
   mobileBreakpoint = 768,
-  activeCardId = null, // External trigger
-  onCardChange = () => {} // Added to sync with external state
+  activeCardId = null,
+  onCardChange = () => {} 
 }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const isInternalUpdate = useRef(false);
+  const lastNotifiedId = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < mobileBreakpoint);
     };
-
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -82,9 +83,10 @@ export default function Stack({
         const index = prev.findIndex(card => card.id === activeCardId);
         if (index === -1 || index === prev.length - 1) return prev;
         
+        isInternalUpdate.current = false; // Mark as external to avoid notifying parent back
         const newStack = [...prev];
         const [card] = newStack.splice(index, 1);
-        newStack.push(card); // Move to top
+        newStack.push(card); 
         return newStack;
       });
     }
@@ -94,10 +96,10 @@ export default function Stack({
     if (cards.length && cards.length !== stack.length) {
       setStack(cards.map((content, index) => ({ id: index, content })));
     }
-  }, [cards]);
-
+  }, [cards, stack.length]);
 
   const sendToBack = (id) => {
+    isInternalUpdate.current = true; // Mark as internal to notify parent
     setStack(prev => {
       const newStack = [...prev];
       const index = newStack.findIndex(card => card.id === id);
@@ -107,11 +109,9 @@ export default function Stack({
     });
   };
 
-  const lastNotifiedId = useRef(null);
-
-  // Notify parent when top card changes, safely outside the render cycle
+  // Notify parent only on internal changes
   useEffect(() => {
-    if (stack.length) {
+    if (stack.length && isInternalUpdate.current) {
       const topId = stack[stack.length - 1].id;
       if (topId !== lastNotifiedId.current) {
         lastNotifiedId.current = topId;
@@ -120,14 +120,12 @@ export default function Stack({
     }
   }, [stack, onCardChange]);
 
-
   useEffect(() => {
     if (autoplay && stack.length > 1 && !isPaused) {
       const interval = setInterval(() => {
         const topCardId = stack[stack.length - 1].id;
         sendToBack(topCardId);
       }, autoplayDelay);
-
       return () => clearInterval(interval);
     }
   }, [autoplay, autoplayDelay, stack, isPaused]);
@@ -139,7 +137,6 @@ export default function Stack({
       onMouseLeave={() => pauseOnHover && setIsPaused(false)}
     >
       {stack.map((card, index) => {
-        // Use a deterministic pseudo-random value based on the card id to prevent hydration mismatch
         const randomRotate = randomRotation ? ((card.id * 12345) % 10) - 5 : 0;
         return (
           <CardRotate
