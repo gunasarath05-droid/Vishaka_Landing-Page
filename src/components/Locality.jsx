@@ -126,7 +126,11 @@ export default function Locality() {
                 ))}
               </div>
 
+              {/* Background 'Stacked' Page (Blurred) */}
+              <div className="absolute inset-0 bg-white/40 shadow-xl rounded-r-2xl border border-gold/5 blur-[2px] transform translate-x-1 translate-y-1 -z-10" />
+
               <AnimatePresence mode="wait">
+
                 <motion.div
                   key={activeIndex}
                   initial={{ rotateY: 90, skewY: 10, x: 60, opacity: 0, filter: "blur(10px)" }}
