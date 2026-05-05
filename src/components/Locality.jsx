@@ -19,6 +19,7 @@ export default function Locality() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  // Auto-cycle highlight flow
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
@@ -42,8 +43,8 @@ export default function Locality() {
 
   return (
     <section id="locality" className="bg-cream py-20 lg:py-32 px-6 relative overflow-hidden font-sans">
-      <div className="absolute inset-0 pointer-events-none opacity-20" 
-           style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+      <div className="absolute inset-0 pointer-events-none opacity-20"
+        style={{ backgroundImage: 'radial-gradient(circle, rgba(184,150,87,0.15) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
@@ -58,7 +59,7 @@ export default function Locality() {
             <svg viewBox="0 0 500 500" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
               <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(184,150,87,0.1)" strokeWidth="1" />
               <circle cx="250" cy="250" r="210" fill="none" stroke="rgba(184,150,87,0.2)" strokeWidth="1.5" strokeDasharray="8 6" />
-              
+
               {locations.map((loc, i) => {
                 const pos = getPosition(loc.angle, loc.r);
                 return (
@@ -113,116 +114,80 @@ export default function Locality() {
             })}
           </div>
 
-          {/* RIGHT: Premium Notebook Style Card with Better Animation */}
+          {/* RIGHT: Notebook Style Card with Enhanced Animation */}
           <div className="lg:col-span-5 flex flex-col items-center">
-            <div className="relative w-full max-w-[420px] perspective-3000">
-              
-              {/* Premium Spiral Binder */}
-              <div className="absolute left-[-22px] top-1/2 -translate-y-1/2 flex flex-col gap-6 z-50">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} className="relative group">
-                    <div className="w-10 h-3 bg-gradient-to-r from-gray-500 via-gray-100 to-gray-400 rounded-full shadow-[0_2px_4px_rgba(0,0,0,0.3)] border-y border-white/20" />
-                    <div className="absolute left-6 top-1/2 -translate-y-1/2 w-2 h-2 bg-black/20 rounded-full blur-[1px]" />
-                  </div>
+            {/* Notebook Page Container */}
+            <div className="relative w-full max-w-[400px] perspective-2000 mt-12 lg:mt-0">
+
+              {/* Spiral/Rings on the left */}
+              <div className="absolute left-[-15px] top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="w-8 h-2 bg-gradient-to-r from-gray-400 to-gray-200 rounded-full shadow-md border border-gray-300" />
                 ))}
               </div>
 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
-                  initial={{ rotateY: 90, skewY: 10, x: 50, opacity: 0 }}
+                  initial={{ rotateY: 90, skewY: 10, x: 60, opacity: 0 }}
                   animate={{ rotateY: 0, skewY: 0, x: 0, opacity: 1 }}
-                  exit={{ rotateY: -130, skewY: -15, x: -100, opacity: 0 }}
-                  transition={{ 
-                    duration: 1.1, 
-                    ease: [0.645, 0.045, 0.355, 1], // Custom cubic-bezier for physical page turn
+                  exit={{ rotateY: -110, skewY: -15, x: -80, opacity: 0 }}
+                  transition={{
+                    duration: 0.9,
+                    ease: [0.645, 0.045, 0.355, 1], // Cubic-bezier for realistic paper movement
                   }}
-                  className="bg-[#FAFAFA] shadow-[25px_25px_80px_rgba(0,0,0,0.12)] rounded-r-3xl overflow-hidden border-l-[14px] border-l-gold/10 border border-gold/5 relative min-h-[600px]"
+                  className="bg-white shadow-2xl rounded-r-2xl overflow-hidden border border-gold/10 relative"
                   style={{ transformOrigin: "left center", backfaceVisibility: "hidden" }}
                 >
-                  {/* Subtle Page Turn Shadow Gradient */}
-                  <motion.div 
+                  {/* Sweeping Page Turn Shadow effect */}
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 0 }}
                     exit={{ opacity: 0.5 }}
-                    transition={{ duration: 0.6 }}
-                    className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent z-40 pointer-events-none"
+                    transition={{ duration: 0.5 }}
+                    className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent z-30 pointer-events-none"
                   />
 
-                  {/* Premium Paper Texture Layer */}
-                  <div className="absolute inset-0 opacity-[0.06] pointer-events-none" 
-                       style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/paper-fibers.png")' }} />
-                  
-                  {/* Notebook Ruled Lines */}
-                  <div className="absolute inset-0 opacity-[0.08] pointer-events-none" 
-                       style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, #000 32px)' }} />
+                  {/* Notebook Paper Texture Overlay */}
+                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(transparent, transparent 23px, #000 24px)' }} />
 
-                  {/* Vertical Margin Line */}
-                  <div className="absolute left-8 top-0 bottom-0 w-[1.5px] bg-red-400/25" />
-
-                  {/* Top: Image Section with Premium Overlay */}
-                  <div className="relative w-full h-64 md:h-72 overflow-hidden border-b border-gold/10">
-                    <Image src={activeLoc.img} alt={activeLoc.name} fill className="object-cover" sizes="420px" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    
-                    {/* Floating Badge */}
-                    <div className="absolute bottom-6 right-6 bg-white/20 backdrop-blur-md border border-white/30 px-5 py-2 text-white">
-                       <p className="text-[9px] font-bold tracking-[3px] uppercase opacity-90 mb-0.5">Location Hub</p>
-                       <p className="text-sm font-serif italic text-gold">{activeLoc.tag}</p>
+                  {/* Top: Image Section */}
+                  <div className="relative w-full h-56 md:h-64 overflow-hidden border-b border-gold/10">
+                    <Image src={activeLoc.img} alt={activeLoc.name} fill className="object-cover" sizes="400px" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                    <div className="absolute top-4 right-4 bg-gold/90 backdrop-blur-sm text-white px-3 py-1 text-[10px] font-bold tracking-widest uppercase">
+                      {activeLoc.tag}
                     </div>
                   </div>
 
-                  {/* Bottom: Handcrafted Content Section */}
-                  <div className="p-10 pt-14 space-y-12 relative">
-                    <motion.div 
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 }}
-                    >
-                      <h3 className="font-serif text-4xl text-royal-dark mb-1 leading-tight tracking-tight">
-                        {activeLoc.name}
-                      </h3>
-                      <p className="text-gold/70 text-[9px] font-black tracking-[5px] uppercase">Architectural Site Data</p>
-                    </motion.div>
+                  {/* Bottom: Details Section */}
+                  <div className="p-8 space-y-8 bg-white/80 backdrop-blur-sm relative">
+                    <div className="border-b border-gold/10 pb-4">
+                      <h3 className="font-serif text-3xl text-royal-dark mb-1">{activeLoc.name}</h3>
+                      <p className="text-gold text-xs font-medium tracking-[3px] uppercase">Landmark Details</p>
+                    </div>
 
-                    <div className="grid grid-cols-2 gap-x-12 gap-y-12">
+                    <div className="grid grid-cols-2 gap-y-8 gap-x-12">
                       {[
-                        { label: "Classification", value: activeLoc.cat },
-                        { label: "Connectivity", value: activeLoc.tag },
-                        { label: "Regional Reach", value: activeLoc.dist, big: true },
-                        { label: "Time Metric", value: `${activeLoc.time} Drive` }
+                        { label: "Category", value: activeLoc.cat },
+                        { label: "Status", value: activeLoc.tag, status: true },
+                        { label: "Reach", value: activeLoc.dist, big: true },
+                        { label: "Travel Time", value: activeLoc.time }
                       ].map((item, idx) => (
                         <motion.div 
                           key={item.label}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.4 + idx * 0.1 }}
-                          className="group"
+                          className="space-y-1"
                         >
-                          <p className="text-[8px] tracking-[4px] uppercase text-royal-dark/25 font-black mb-3 group-hover:text-gold transition-colors duration-500">
-                            {item.label}
-                          </p>
-                          <p className={`text-royal-dark/80 font-medium ${item.big ? "text-3xl font-serif font-light" : "text-base"}`}>
+                          <p className="text-[8px] tracking-[3px] uppercase text-royal-dark/30 font-bold">{item.label}</p>
+                          <p className={`text-royal-dark/70 ${item.status ? "font-bold text-gold italic" : item.big ? "font-serif font-semibold italic text-xl text-royal-dark" : "text-sm font-medium"}`}>
                             {item.value}
                           </p>
                         </motion.div>
                       ))}
                     </div>
-
-                    {/* Official Site Stamp */}
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0.5, rotate: -30 }}
-                      animate={{ opacity: 0.4, scale: 1, rotate: -15 }}
-                      transition={{ delay: 0.8, type: "spring" }}
-                      className="flex justify-end pt-6 grayscale"
-                    >
-                      <div className="relative w-24 h-24 border-2 border-gold/40 rounded-full flex flex-col items-center justify-center p-2 text-center overflow-hidden">
-                        <div className="absolute inset-1 border border-gold/20 rounded-full" />
-                        <span className="text-gold text-[8px] font-black tracking-[4px] uppercase mb-1">VISHAKA</span>
-                        <span className="text-royal-dark text-[7px] font-bold uppercase leading-tight tracking-tighter">Site Authenticated</span>
-                        <div className="absolute -bottom-2 -right-2 w-full h-1 bg-gold/10 rotate-45" />
-                      </div>
-                    </motion.div>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -232,7 +197,7 @@ export default function Locality() {
       </div>
 
       <style jsx global>{`
-        .perspective-3000 { perspective: 3000px; }
+        .perspective-2000 { perspective: 2000px; }
       `}</style>
     </section>
   );
