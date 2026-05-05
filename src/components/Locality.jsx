@@ -23,7 +23,7 @@ export default function Locality() {
     if (isPaused) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % locations.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, [isPaused]);
 
@@ -107,74 +107,71 @@ export default function Locality() {
             })}
           </div>
 
-          {/* RIGHT: Realistic Segmented Book Flip */}
+          {/* RIGHT: Segmented CSS Book Flip (Image Left, Details Right) */}
           <div className="lg:col-span-6 flex flex-col items-center">
-            <div className="book-container">
-              <div className="book-body">
-                {/* Static Left Page (Current Info) */}
-                <div className="book-page left-page">
-                   <div className="page-content">
-                      <div className="relative w-full h-40 mb-4 overflow-hidden rounded-lg">
-                        <Image src={activeLoc.img} alt={activeLoc.name} fill className="object-cover" />
-                      </div>
-                      <h3 className="font-serif text-2xl text-royal-dark mb-2">{activeLoc.name}</h3>
-                      <div className="space-y-2 text-[10px] tracking-wider uppercase text-royal-dark/60 font-bold">
-                        <p className="flex justify-between"><span>Category:</span> <span className="text-gold">{activeLoc.cat}</span></p>
-                        <p className="flex justify-between"><span>Distance:</span> <span className="text-gold">{activeLoc.dist}</span></p>
-                        <p className="flex justify-between"><span>Travel:</span> <span className="text-gold">{activeLoc.time}</span></p>
-                      </div>
-                   </div>
+            <div className="book-desk">
+              <div className="book-spread">
+                
+                {/* Left Page: Always Image */}
+                <div className="page left-static">
+                  <div className="image-container">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="relative w-full h-full"
+                      >
+                        <Image src={activeLoc.img} alt="" fill className="object-cover" />
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
                 </div>
 
-                {/* Static Right Page (Next Info - visible during flip) */}
-                <div className="book-page right-page">
-                   <div className="page-content">
-                      <div className="relative w-full h-40 mb-4 overflow-hidden rounded-lg">
-                        <Image src={nextLoc.img} alt={nextLoc.name} fill className="object-cover" />
-                      </div>
-                      <h3 className="font-serif text-2xl text-royal-dark mb-2">{nextLoc.name}</h3>
-                      <div className="space-y-2 text-[10px] tracking-wider uppercase text-royal-dark/60 font-bold">
-                        <p className="flex justify-between"><span>Category:</span> <span className="text-gold">{nextLoc.cat}</span></p>
-                        <p className="flex justify-between"><span>Distance:</span> <span className="text-gold">{nextLoc.dist}</span></p>
-                        <p className="flex justify-between"><span>Travel:</span> <span className="text-gold">{nextLoc.time}</span></p>
-                      </div>
-                   </div>
+                {/* Right Page: Always Details */}
+                <div className="page right-static">
+                  <div className="details-container">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeIndex}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.8 }}
+                        className="h-full flex flex-col justify-center"
+                      >
+                        <h3 className="font-serif text-3xl text-royal-dark mb-4">{activeLoc.name}</h3>
+                        <div className="space-y-4 text-[10px] tracking-[3px] uppercase text-royal-dark/60 font-bold">
+                          <p className="flex justify-between border-b border-gold/10 pb-2"><span>Category:</span> <span className="text-gold">{activeLoc.cat}</span></p>
+                          <p className="flex justify-between border-b border-gold/10 pb-2"><span>Distance:</span> <span className="text-gold">{activeLoc.dist}</span></p>
+                          <p className="flex justify-between border-b border-gold/10 pb-2"><span>Time Metric:</span> <span className="text-gold">{activeLoc.time}</span></p>
+                          <p className="flex justify-between"><span>Strategic Hub:</span> <span className="text-gold">{activeLoc.tag}</span></p>
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
                 </div>
 
-                {/* The Flipping Page Segments */}
-                <div className="flipping-page-container">
-                  <AnimatePresence mode="wait">
-                    <motion.div 
-                      key={activeIndex}
-                      className="flipping-segment-root"
-                      initial={{ rotateY: 0 }}
-                      animate={{ rotateY: -180 }}
-                      transition={{ duration: 1.5, ease: "easeInOut" }}
-                    >
-                      {/* Segment 1 */}
-                      <div className="segment s1">
-                        <div className="segment s2">
-                          <div className="segment s3">
-                            <div className="segment s4">
-                               <div className="segment-content">
-                                  {/* Back of the page (shows next content) */}
-                                  <div className="back-side">
-                                    <Image src={nextLoc.img} alt="" fill className="object-cover" />
-                                  </div>
-                                  {/* Front of the page (shows current content) */}
-                                  <div className="front-side">
-                                    <Image src={activeLoc.img} alt="" fill className="object-cover" />
-                                  </div>
-                               </div>
+                {/* The Flipping Overlay (Matches CSS segments) */}
+                <div className="flips-container">
+                   <div className="flip-segment s1">
+                      <div className="flip-segment s2">
+                        <div className="flip-segment s3">
+                          <div className="flip-segment s4">
+                            <div className="flip-segment s5">
+                              <div className="flip-segment s6">
+                                <div className="flip-segment s7"></div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </motion.div>
-                  </AnimatePresence>
+                   </div>
                 </div>
 
-                <div className="spine"></div>
+                <div className="book-gap"></div>
               </div>
             </div>
           </div>
@@ -182,110 +179,115 @@ export default function Locality() {
       </div>
 
       <style jsx>{`
-        .book-container {
+        .book-desk {
           perspective: 1200px;
-          width: 100%;
-          max-width: 500px;
-          height: 400px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          transform: rotateX(25deg);
+          perspective-origin: center 50px;
+          transform: scale(1.1);
+          filter: drop-shadow(0px 20px 40px rgba(0, 0, 0, 0.15));
         }
-        .book-body {
+
+        .book-spread {
           position: relative;
           width: 480px;
           height: 320px;
-          background: #e5e5e5;
           transform-style: preserve-3d;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-          border-radius: 4px;
         }
-        .book-page {
-          position: absolute;
+
+        .page {
           width: 240px;
           height: 320px;
           background: white;
-          padding: 30px;
-          box-sizing: border-box;
-          border: 1px solid #ddd;
-        }
-        .left-page {
-          left: 0;
-          transform-origin: right;
-          border-radius: 4px 0 0 4px;
-        }
-        .right-page {
-          right: 0;
-          transform-origin: left;
-          border-radius: 0 4px 4px 0;
-        }
-        .page-content {
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-        .spine {
-          position: absolute;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 2px;
-          height: 100%;
-          background: rgba(0,0,0,0.1);
-          z-index: 100;
-        }
-        
-        .flipping-page-container {
-          position: absolute;
-          right: 0;
-          width: 240px;
-          height: 320px;
-          transform-style: preserve-3d;
-          z-index: 50;
-          pointer-events: none;
-        }
-
-        .flipping-segment-root {
-          width: 100%;
-          height: 100%;
-          transform-style: preserve-3d;
-          transform-origin: left center;
-        }
-
-        .segment {
           position: absolute;
           top: 0;
-          left: 0;
-          width: 25%;
+          border: 1px solid rgba(0,0,0,0.1);
+          transform-style: preserve-3d;
+          box-shadow: inset 3px 0 10px rgba(0,0,0,0.05);
+        }
+
+        .left-static {
+          right: 50%;
+          transform: rotateX(25deg) rotateY(3deg);
+          transform-origin: 100% 100%;
+          border-radius: 4px 0 0 4px;
+          overflow: hidden;
+        }
+
+        .right-static {
+          left: 50%;
+          transform: rotateX(25deg) rotateY(-3deg);
+          transform-origin: 0% 100%;
+          border-radius: 0 4px 4px 0;
+          padding: 30px;
+        }
+
+        .image-container {
+          width: 100%;
           height: 100%;
+          position: relative;
+        }
+
+        .book-gap {
+          width: 4px;
+          height: 320px;
+          background: rgba(0,0,0,0.1);
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%) rotateX(25deg);
+          z-index: 100;
+        }
+
+        /* Flipping Segments Animation Logic */
+        .flips-container {
+          position: absolute;
+          top: 0;
+          right: 50%;
+          width: 240px;
+          height: 320px;
+          pointer-events: none;
+          transform-style: preserve-3d;
+        }
+
+        .flip-segment {
+          width: 34px; /* 240 / 7 segments approx */
+          height: 100%;
+          position: absolute;
+          top: 0;
+          transform-origin: 100% 100%;
+          right: 100%;
+          border: solid rgba(0,0,0,0.05);
+          border-width: 1px 0;
           background: white;
           transform-style: preserve-3d;
-          transform-origin: right center;
         }
 
-        .s1 { width: 100%; left: 0; transform-origin: left center; }
-        .s2, .s3, .s4 { width: 100%; left: 0; }
-
-        .segment-content {
-          position: absolute;
-          inset: 0;
-          transform-style: preserve-3d;
+        .s1 {
+          right: 0;
+          width: 34px;
+          animation: flipMove 6s infinite ease-in-out;
+          border-width: 1px 1px 1px 0;
         }
 
-        .front-side, .back-side {
-          position: absolute;
-          inset: 0;
-          backface-visibility: hidden;
-          background: white;
-          border: 1px solid #eee;
+        .flip-segment:not(.s1) {
+          right: calc(100% - 1px);
+          top: -1px;
+          transform-origin: right;
+          animation: flipCurl 6s infinite ease-in-out;
         }
 
-        .back-side {
-          transform: rotateY(180deg);
+        @keyframes flipMove {
+          0%, 10% { transform: rotateX(25deg) rotateY(-3deg); }
+          50%, 100% { transform: rotateX(25deg) rotateY(-177deg); }
         }
 
-        /* Simulating the bend by adding rotation to each nested segment */
-        /* This is a simplified version of the segmented flip */
+        @keyframes flipCurl {
+          0%, 10% { transform: rotateY(0deg); }
+          30%, 70% { transform: rotateY(-12deg); }
+          90%, 100% { transform: rotateY(0deg); }
+        }
+
+        .s7 {
+          border-width: 1px 0 1px 1px;
+        }
       `}</style>
     </section>
   );
