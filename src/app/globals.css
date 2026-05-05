@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  /* GOLD (Accent - ~30%) */
+  --gold: #D4AF37;
+  --gold-light: #E6C766;
+  --gold-dark: #A67C00;
+  --gold-pale: #F5E7B2;
+
+
+  /* EMERALD GREEN (Secondary - highlights, icons) */
+  --emerald: #895129;
+  --emerald-light: #895129;
+  --emerald-dark: #895129;
+
+  /* MAROON RED (Luxury depth - accents, hover states) */
+  --maroon: #5A0F1C;
+  --maroon-light: #7A1C2D;
+  --maroon-dark: #3A0912;
+
+  /* NEUTRALS */
+  --cream: #FAF6EE;
+  --dark: #1A1A1A;
+  --mid: #2E2E2E;
+  --border: rgba(212, 175, 55, 0.25);
+
+  /* GLOBAL */
+  --background: var(--cream);
+  --foreground: #1A1A1A;
+  
+  /* Compatibility */
+  --deep: var(--royal-dark);
+}
+
+@theme inline {
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-gold-dark: var(--gold-dark);
+  --color-gold-pale: var(--gold-pale);
+  
+  --color-royal: var(--royal);
+  --color-royal-light: var(--royal-light);
+  --color-royal-dark: var(--royal-dark);
+  
+  --color-emerald: var(--emerald);
+  --color-emerald-light: var(--emerald-light);
+  --color-emerald-dark: var(--emerald-dark);
+  
+  --color-maroon: var(--maroon);
+  --color-maroon-light: var(--maroon-light);
+  --color-maroon-dark: var(--maroon-dark);
+  
+  --color-deep: var(--deep);
+  --color-dark: var(--dark);
+  --color-mid: var(--mid);
+  --color-cream: var(--cream);
+  
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(250, 246, 238, 0.85); /* Matches --cream */
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Gold button utility */
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: var(--deep);
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  transition: all 0.3s;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4); /* Matches --gold */
+}
+
+/* Luxury Background Patterns - Topographic/Wavy Style */
+.luxury-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='800' height='400' viewBox='0 0 800 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23d4af37' stroke-opacity='0.1' stroke-width='1'%3E%3Ccircle cx='400' cy='400' r='100'/%3E%3Ccircle cx='400' cy='400' r='120'/%3E%3Ccircle cx='400' cy='400' r='140'/%3E%3Ccircle cx='400' cy='400' r='160'/%3E%3Ccircle cx='400' cy='400' r='180'/%3E%3Ccircle cx='400' cy='400' r='200'/%3E%3Ccircle cx='400' cy='400' r='220'/%3E%3Ccircle cx='400' cy='400' r='240'/%3E%3Ccircle cx='400' cy='400' r='260'/%3E%3Ccircle cx='400' cy='400' r='280'/%3E%3Ccircle cx='400' cy='400' r='300'/%3E%3Ccircle cx='400' cy='400' r='320'/%3E%3Ccircle cx='0' cy='0' r='100'/%3E%3Ccircle cx='0' cy='0' r='120'/%3E%3Ccircle cx='0' cy='0' r='140'/%3E%3Ccircle cx='0' cy='0' r='160'/%3E%3Ccircle cx='0' cy='0' r='180'/%3E%3Ccircle cx='0' cy='0' r='200'/%3E%3Ccircle cx='800' cy='0' r='100'/%3E%3Ccircle cx='800' cy='0' r='120'/%3E%3Ccircle cx='800' cy='0' r='140'/%3E%3Ccircle cx='800' cy='0' r='160'/%3E%3Ccircle cx='800' cy='0' r='180'/%3E%3Ccircle cx='800' cy='0' r='200'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 800px 400px;
+}
+
+.luxury-pattern-light {
+  background-image: url("data:image/svg+xml,%3Csvg width='800' height='400' viewBox='0 0 800 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23000' stroke-opacity='0.03' stroke-width='1'%3E%3Ccircle cx='400' cy='400' r='100'/%3E%3Ccircle cx='400' cy='400' r='120'/%3E%3Ccircle cx='400' cy='400' r='140'/%3E%3Ccircle cx='400' cy='400' r='160'/%3E%3Ccircle cx='400' cy='400' r='180'/%3E%3Ccircle cx='400' cy='400' r='200'/%3E%3Ccircle cx='400' cy='400' r='220'/%3E%3Ccircle cx='400' cy='400' r='240'/%3E%3Ccircle cx='400' cy='400' r='260'/%3E%3Ccircle cx='400' cy='400' r='280'/%3E%3Ccircle cx='400' cy='400' r='300'/%3E%3Ccircle cx='400' cy='400' r='320'/%3E%3Ccircle cx='0' cy='0' r='100'/%3E%3Ccircle cx='0' cy='0' r='120'/%3E%3Ccircle cx='0' cy='0' r='140'/%3E%3Ccircle cx='0' cy='0' r='160'/%3E%3Ccircle cx='0' cy='0' r='180'/%3E%3Ccircle cx='0' cy='0' r='200'/%3E%3Ccircle cx='800' cy='0' r='100'/%3E%3Ccircle cx='800' cy='0' r='120'/%3E%3Ccircle cx='800' cy='0' r='140'/%3E%3Ccircle cx='800' cy='0' r='160'/%3E%3Ccircle cx='800' cy='0' r='180'/%3E%3Ccircle cx='800' cy='0' r='200'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 800px 400px;
+}
+
