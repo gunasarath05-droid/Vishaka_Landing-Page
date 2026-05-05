@@ -20,6 +20,10 @@ export default function Locality() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  const handleCardChange = React.useCallback((id) => {
+    setActiveIndex(id);
+  }, []);
+
   const cx = 250;
   const cy = 250;
 
@@ -35,7 +39,7 @@ export default function Locality() {
     <div key={i} className="w-full h-full bg-white relative group overflow-hidden">
       {/* Top Image */}
       <div className="relative w-full h-1/2 overflow-hidden">
-        <Image src={loc.img} alt={loc.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="400px" />
+        <Image src={loc.img} alt={loc.name} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="400px" loading="eager" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         <div className="absolute bottom-4 left-6">
           <span className="bg-gold text-white text-[9px] px-3 py-1 font-bold tracking-[3px] uppercase shadow-lg">
@@ -154,7 +158,7 @@ export default function Locality() {
                   autoplay={!isPaused}
                   autoplayDelay={4000}
                   activeCardId={activeIndex}
-                  onCardChange={(id) => setActiveIndex(id)}
+                  onCardChange={handleCardChange}
                 />
              </div>
              

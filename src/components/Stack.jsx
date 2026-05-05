@@ -107,11 +107,16 @@ export default function Stack({
     });
   };
 
+  const lastNotifiedId = useRef(null);
+
   // Notify parent when top card changes, safely outside the render cycle
   useEffect(() => {
     if (stack.length) {
-      const topCard = stack[stack.length - 1];
-      onCardChange(topCard.id);
+      const topId = stack[stack.length - 1].id;
+      if (topId !== lastNotifiedId.current) {
+        lastNotifiedId.current = topId;
+        onCardChange(topId);
+      }
     }
   }, [stack, onCardChange]);
 

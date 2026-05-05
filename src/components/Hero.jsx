@@ -27,7 +27,7 @@ export default function Hero() {
           fill
           priority
           loading="eager"
-          sizes="100vw"
+          sizes="(max-width: 1024px) 100vw, 90vw"
           className="object-contain object-top"
         />
       </div>
