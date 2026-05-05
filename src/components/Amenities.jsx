@@ -77,72 +77,48 @@ export default function Amenities() {
           <div className="w-16 h-0.5 bg-gradient-to-r from-gold to-transparent mx-auto mt-6" />
         </div>
 
-        {/* Featured Image Slider */}
-        <div className="relative mb-16">
-          <div className="relative aspect-[16/9] md:aspect-[21/9] overflow-hidden rounded-2xl shadow-2xl bg-deep/5 border border-gold/10">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeImage}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={featuredImages[activeImage].url}
-                  alt={featuredImages[activeImage].title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 90vw"
-                  className="object-cover"
-                />
-              </motion.div>
-            </AnimatePresence>
+        {/* Full-Width Continuous Marquee Banner */}
+      </div>
 
-            {/* Slider Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-deep/60 via-transparent to-transparent pointer-events-none z-10" />
-
-            <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end z-20">
-              <div>
-                <motion.p
-                  key={activeImage}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-white text-lg md:text-2xl font-light tracking-wide"
-                >
-                  {featuredImages[activeImage].title}
-                </motion.p>
-              </div>
-
-              <div className="flex gap-4">
-                <button
-                  onClick={prevImage}
-                  className="p-3 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="p-3 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors"
-                >
-                  <ChevronRight size={20} />
-                </button>
+      <div className="w-full relative overflow-hidden py-12 md:py-20">
+        <div className="flex gap-4 md:gap-6 w-max animate-marquee">
+          {[...featuredImages, ...featuredImages, ...featuredImages].map((img, i) => (
+            <div 
+              key={i} 
+              className="relative w-[280px] sm:w-[450px] lg:w-[600px] aspect-[16/10] flex-shrink-0 group overflow-hidden rounded-2xl shadow-xl"
+            >
+              <Image
+                src={img.url}
+                alt={img.title}
+                fill
+                sizes="(max-width: 768px) 450px, 600px"
+                className="object-cover group-hover:scale-110 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-deep/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute bottom-6 left-6 text-white translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <p className="text-sm font-light tracking-[3px] uppercase">{img.title}</p>
               </div>
             </div>
-          </div>
-
-          {/* Pagination Dots */}
-          <div className="flex justify-center gap-2 mt-6">
-            {featuredImages.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveImage(i)}
-                className={`h-1 transition-all duration-500 rounded-full ${activeImage === i ? "w-8 bg-gold" : "w-2 bg-gold/30 hover:bg-gold/50"
-                  }`}
-              />
-            ))}
-          </div>
+          ))}
         </div>
+
+        {/* Marquee CSS is needed for smooth continuous motion */}
+        <style jsx global>{`
+          @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-33.333%); }
+          }
+          .animate-marquee {
+            animation: marquee 40s linear infinite;
+          }
+          .animate-marquee:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
+      </div>
+
+      <div className="max-w-7xl mx-auto">
+
 
         {/* Amenities Grid - Circular Layout */}
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-y-8 sm:gap-y-12 gap-x-4 sm:gap-x-8">
