@@ -108,9 +108,11 @@ export default function Locality() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   style={{ left: `${(pos.x / 500) * 100}%`, top: `${(pos.y / 500) * 100}%` }}
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-30 cursor-pointer group"
+                  onClick={() => { setActiveIndex(i); setIsPaused(true); }}
                   onMouseEnter={() => { setActiveIndex(i); setIsPaused(true); }}
                   onMouseLeave={() => setIsPaused(false)}
                 >
+
                   <div className={`w-16 h-16 rounded-full p-1 bg-white border border-gold/20 shadow-xl transition-all duration-500 overflow-hidden relative
                                  ${activeIndex === i ? "scale-125 border-gold shadow-gold/20" : "group-hover:scale-110 group-hover:border-gold/50"}`}>
                     <Image src={loc.img} alt={loc.name} fill className="object-cover" sizes="64px" />
